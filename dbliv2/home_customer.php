@@ -4,12 +4,30 @@ session_start();
 	include("function.php");
 	$client_data = check_login_customer($con);
 	
-	
-	
 	$_SESSION; 
+
+	// if($_SERVER['REQUEST_METHOD']== "POST"){//smt was posted
+    //     $client_SSN = $_POST['client_SSN'];
+    //     $cmail = $_POST['cmail'];
+    //     $cFullName = $_POST['cFullName'];
+    //     $caddress = $_POST['caddress'];
+    //     $cpass= $_POST['cpass'];
+    //     if(!empty($client_SSN)  && !empty($cmail  ) && !empty($cFullName) && !empty($caddress )  && !empty($cpass)  ){
+    //         //save to database
+
+    //         $query = "insert into Client (client_SSN,  cmail, cFullName, caddress, cpass ) value ('$client_SSN', '$cmail','$cFullName','$caddress','$cpass' )";
+    //         mysqli_query($con, $query);
+    //         header("Location: login_customer.php");
+    //         die;
+    //     }else{
+    //         echo"Please enter all fields!";
+    //     }
+    // }
 
 
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -54,6 +72,7 @@ session_start();
 			
 			foreach($fetchData as $data){
 			?>
+		</div>
 			<tr>
 			<td><?php echo $data['room_id']??''; ?></td>
 			<td><?php echo $data['room_number']??''; ?></td>
@@ -66,6 +85,7 @@ session_start();
 			<td><?php echo $data['chain_name']??''; ?></td>
 			<td><?php echo $data['ratingStars']??''; ?></td>
 			<td><?php echo $data['city']??''; ?></td>  
+			<td> <input type="button" value="<?php echo $data['room_id']??''; ?>" onclick= /></td>
 			</tr>
 			<?php
 			}}else{ ?>
