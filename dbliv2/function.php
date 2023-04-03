@@ -34,4 +34,34 @@ function check_login_employee($con)
 	die;
 }
 
+$db = $con;
+$tableName="room";
+$columns= ['room_id', 'room_number','room.hotel_id','price','peopleCapacity', 'view','extandable','damage','chain_name','ratingStars', 'city'];
+$fetchData = fetch_data($db, $tableName, $columns);
 
+
+function fetch_data($db, $tableName, $columns){
+	if(empty($db)){
+	 $msg= "Database connection error";
+	}elseif (empty($columns) || !is_array($columns)) {
+	 $msg="columns Name must be defined in an indexed array";
+	}elseif(empty($tableName)){
+	  $msg= "Table Name is empty";
+   }else{
+	   
+   $columnName = implode(", ", $columns);
+   $query = "SELECT ".$columnName." FROM $tableName".", hotel WHERE hotel.hotel_id=room.hotel_id ORDER BY room_id ASC";
+   $result = $db->query($query);
+   if($result== true){ 
+	if ($result->num_rows > 0) {
+	   $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+	   $msg= $row;
+	} else {
+	   $msg= "No Data Found"; 
+	}
+   }else{
+	 $msg= mysqli_error($db);
+   }
+   }
+   return $msg;
+   }
