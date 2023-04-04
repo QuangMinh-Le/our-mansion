@@ -65,3 +65,43 @@ function fetch_data($db, $tableName, $columns){
    }
    return $msg;
    }
+
+   	$tableName1="reservation";
+	$fetchReservation = fetch_reservations($db, $tableName1);
+
+   function fetch_reservations($db, $tableName){
+	if(empty($db)){
+		$msg= "Database connection error";
+		}elseif(empty($tableName)){
+		$msg= "Table Name is empty";
+	}else{
+		$query = "SELECT * FROM $tableName"." ORDER BY reservation_id ASC";
+		$result = $db->query($query);
+		if($result== true){ 
+			if ($result->num_rows > 0) {
+				$row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+				$msg= $row;
+			} else {
+			 	$msg= "No Data Found"; 
+			}
+		}else{
+			$msg= mysqli_error($db);
+		}
+	}
+	return $msg;
+   }
+
+   function bookReservation ($con, $reservation_id, $employee_SSN, $client_SSN, $room_id, $startDate, $endDate, $archived  ){
+		$query = "INSERT INTO Booking (reservation_id,employee_SSN, client_SSN, room_id, startDate, endDate, archived, paid) VALUE ('$reservation_id','$employee_SSN','$client_SSN','$room_id', '$startDate','$endDate', '$archived', TRUE )";
+		$result = mysqli_query($con, $query);
+		if($result)
+		{
+			echo "<p> Booking created for reservation_id '$reservation_id' ! </p> ";
+
+		}
+		else
+		{
+			echo "<p> Booking counldn't be created! Maybe booking already exist for this reservation !</p>";
+
+		}
+   }
