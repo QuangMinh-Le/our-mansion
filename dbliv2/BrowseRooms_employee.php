@@ -27,7 +27,27 @@ session_start();
 		 <br>
 		 logined as employee
          <br>
-         <a href="home_employee.php"> back to home</a>
+         <a href="home_employee.php"> back to home</a> <br><br>
+
          
+         <form action="" method="post">
+            <select name="courseName">
+                <option value="">Select Course</option>
+                <?php 
+                $query ="SELECT id, courseName FROM courses";
+                $result = $conn->query($query);
+                if($result->num_rows> 0){
+                    while($optionData=$result->fetch_assoc()){
+                    $option =$optionData['courseName'];
+                    $id =$optionData['id'];
+                ?>
+                <option value="<?php echo $option; ?>" ><?php echo $option; ?> </option>
+            <?php
+                }}
+                ?>
+            </select>
+            <input type="submit" name="submit">
+         </form>
+
 </body>
 </html>
