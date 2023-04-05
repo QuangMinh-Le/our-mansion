@@ -19,7 +19,7 @@ session_start();
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-        <h1 style= "font-family: fantasy ; text-align: center;">OurMansion</h1>
+        <h1 style= "font-family: fantasy ; text-align: center;">OurMansion - Home</h1>
 		<a href="logout_employee.php"> Logout</a>
 		<h1>This is the home page</h1>
 		<br>
@@ -27,8 +27,9 @@ session_start();
 		 <br>
 		 logined as employee, options:
 		 <br>
-		 <a href="BookReservation_employee.php"> See Reservations</a> <br>
-		 <a href="BrowseRooms_employee.php"> Browse Rooms</a>
+		 <a href="BookReservation_employee.php"> See/Book Reservations</a> <br>
+		 <a href="BrowseRooms_employee.php"> Browse Rooms to book</a><br>
+		 <a href="modifyInfo_employee.php"> Modify infos</a>
 
 		 <br><br><br>
 		 <h1 style= " text-align: center;"> Existing rooms to book:</h1>
@@ -71,7 +72,7 @@ session_start();
 			<td><?php echo $data['chain_name']??''; ?></td>
 			<td><?php echo $data['ratingStars']??''; ?></td>
 			<td><?php echo $data['city']??''; ?></td>  
-			<td> <input type="button" value="Reserve!!!" onclick="location='test.php'" /></td>
+			<td> <input type="button" value="Reserve!!!"  /></td>
 			</tr>
 			<?php
 			}}else{ ?>

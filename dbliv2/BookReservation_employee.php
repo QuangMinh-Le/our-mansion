@@ -14,7 +14,13 @@ session_start();
         $endDate =  $_POST['endDate'];
         $archived = $_POST['archived'];
         //echo"<p> $reservation_id $client_SSN  $room_id  $startDate $endDate  $archived </p>";
-        bookReservation($con,$reservation_id, $employee_SSN, $client_SSN, $room_id, $startDate, $endDate, $archived);
+		try{
+        	bookReservation($con,$reservation_id, $employee_SSN, $client_SSN, $room_id, $startDate, $endDate, $archived);
+		}catch (Exception $e){
+			echo "<p style= \"color:red\"> Booking counldn't be created! Maybe booking already exist for this reservation !</p>";
+			echo $e->getMessage();
+			//exit;
+		}
 
     }
 
@@ -29,7 +35,7 @@ session_start();
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-        <h1 style= "font-family: fantasy ; text-align: center;">OurMansion</h1>
+        <h1 style= "font-family: fantasy ; text-align: center;">OurMansion - Reservations</h1>
 		<a href="logout_employee.php"> Logout</a>
 		<h1>This is the reservation page</h1>
 		<br>
