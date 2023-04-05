@@ -7,7 +7,7 @@ session_start();
 
     if($_SERVER['REQUEST_METHOD']== "POST"){//smt was posted
         if(isset($_POST['edit']) ){
-            echo "works";
+            
 
         }
 
