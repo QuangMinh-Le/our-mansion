@@ -41,8 +41,8 @@ session_start();
 			<?php echo $deleteMsg??''; ?>
 			<div class="table-responsive">
 			<table class="table table-bordered" >
-			<thead><tr><th>room_id</th>
-
+			<thead><tr>
+				<th>room_id</th>
 				<th>room_number</th>
 				<th>hotel_id</th>
 				<th>price</th>
