@@ -8,7 +8,7 @@ $client_data = check_login_customer($con);
 
 if (isset($_POST['reserve'])) {
 	$client_SSN = $client_data['client_SSN'];
-	echo "$client_SSN";
+	echo "client ssn: $client_SSN";
 	$room_id = $_POST['room_id'];
 	echo "$room_id";
 	$startDate = $_POST['startDate'];
@@ -16,7 +16,7 @@ if (isset($_POST['reserve'])) {
 	$endDate = $_POST['endDate'];
 	echo "$endDate";
 
-	$query ="INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, 'jghasdf', 'gnfcgfd', 0)";
+	$query ="INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
 	try{
 		$result = mysqli_query($con, $query);
  	}catch (Exception $e){
