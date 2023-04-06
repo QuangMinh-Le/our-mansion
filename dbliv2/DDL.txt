@@ -95,7 +95,7 @@ FOREIGN KEY (room_id) REFERENCES Room (room_id)
 
 CREATE TABLE dbliv2.Booking (
 booking_id INTEGER  UNIQUE AUTO_INCREMENT,
-11
+reservation_id INTEGER  UNIQUE,
 employee_SSN VARCHAR(64) NOT NULL,
 client_SSN VARCHAR(64) NOT NULL,
 room_id INTEGER NOT NULL,
