@@ -29,23 +29,23 @@ session_start();
 
     if($_SERVER['REQUEST_METHOD']== "POST"){//smt was posted
         if(isset($_POST['edit']) ){
-            $room_id = $_POST['room_id'];
-            $room_number = $_POST['room_number'];
-            $hotel_id =$_POST['hotel_id'];
-            $price = $_POST['price'];
-            $peopleCapacity = $_POST['peopleCapacity'];            
-            $view = $_POST['view'];
-            $extandable =$_POST['extandable'];
+            $hotel_id = $_POST['hotel_id'];
 
-            $damage = $_POST['damage'];
+            $chain_name = $_POST['chain_name'];
+            $ratingStars =$_POST['ratingStars'];
+            //no change to number of rooms            
+            $city = $_POST['city'];            
+            $address = $_POST['address'];
+            $phone =$_POST['phone'];
+            $email = $_POST['email'];
 
-            $query ="UPDATE room SET room_number=$room_number, hotel_id=$hotel_id, price=$price, peopleCapacity=$peopleCapacity, view ='$view', extandable=$extandable, damage='$damage' WHERE room_id = $room_id    ";
+            $query ="UPDATE hotel SET chain_name='$chain_name', ratingStars=$ratingStars, city='$city', address='$address', phone ='$phone', email='$email' WHERE hotel_id = $hotel_id";
             $result = $con->query($query);
 
         }if(isset($_POST['delete'])){
-            $room_id = $_POST['room_id2'];
-            $query = "DELETE FROM room WHERE room_id=$room_id";
-            //echo "delete room with room_id= $room_id";
+            $hotel_id = $_POST['hotel_id2'];
+            $query = "DELETE FROM Hotel WHERE hotel_id=$hotel_id";
+            //echo "delete hotel with hotel_id= $hotel_id";
             $result = $con->query($query); 
         }if(isset($_POST['add'])){
             $chain_name = $_POST['chain_name1'];
@@ -142,11 +142,11 @@ session_start();
 
 				<th>chain_name</th>
 				<th>ratingStars</th>
-				<th style="width: 20%;">numberOfRooms</th>
-				<th>city</th>
-				<th style="width:50%;">address</th>
-				<th>phone </th>
-				<th style="width:200%;">email</th>
+				<th style="width: 20%;">numberOfRooms (readonly)</th>
+				<th style="width:25%;">city</th>
+				<th style="width:20%;">address</th>
+				<th style="width:50%;">phone </th>
+				<th style="width:500px;">email</th>
 			</thead>
             <tbody>
 		<?php
@@ -156,24 +156,22 @@ session_start();
 			?>
 			<tr>
                 <form method="post">
-                    <td><input name="room_id" value="<?php echo $data['room_id']??''; ?>" style="width:100%;" readonly></td>
+                    <td><input name="hotel_id" value="<?php echo $data['hotel_id']??''; ?>" style="width:100%;" readonly></td>
 
-                    <td><input name="room_number" value="<?php echo $data['room_number']??''; ?>" style="width:25%;"></td>
-                    <td><input name="hotel_id" value="<?php echo $data['hotel_id']??''; ?>" style="width:50%;"></td>
-                    <td><input name="price" value="<?php echo $data['price']??''; ?>" style="width:75%;"></td>
-                    <td><input name="peopleCapacity" value="<?php echo $data['peopleCapacity']??''; ?>" style="width:50%;"></td>
-                    <td><input name="view" value="<?php echo $data['view']??''; ?>" style="width:110%;"></td>
-                    <td><input name="extandable" value="<?php echo $data['extandable']??''; ?>" style="width:50%;"></td>
-                    <td><input name="damage" value="<?php echo $data['damage']??''; ?>" style="width:110%;"></td>
+                    <td><input name="chain_name" value="<?php echo $data['chain_name']??''; ?>" style="width:100%;"></td>
+                    <td><input name="ratingStars" value="<?php echo $data['ratingStars']??''; ?>" style="width:50%;"></td>
+                    <td><input name="numberOfRooms" value="<?php echo $data['numberOfRooms']??''; ?>" style="width:75%;" readonly></td>
+                    <td><input name="city" value="<?php echo $data['city']??''; ?>" style="width:50%;"></td>
+                    <td><input name="address" value="<?php echo $data['address']??''; ?>" style="width:110%;"></td>
+                    <td><input name="phone" value="<?php echo $data['phone']??''; ?>" style="width:50%;"></td>
+                    <td><input name="email" value="<?php echo $data['email']??''; ?>" style="width:200%;"></td>
 
-                    <td><?php echo $data['chain_name']??''; ?></td>
-                    <td><?php echo $data['ratingStars']??''; ?></td>
-                    <td><?php echo $data['city']??''; ?></td>
+                    
 
                     <td> <input type="submit" name="edit"  value="edit" /></td>
                 </form>
                 <form method="post">
-                    <td><input style="width:0%" name="room_id2" value="<?php echo $data['room_id']??''; ?>" /><input type="submit" name="delete" value="delete"   /></td>
+                    <td><input style="width:0%" name="hotel_id2" value="<?php echo $data['hotel_id']??''; ?>" /><input type="submit" name="delete" value="delete"   /></td>
 
                 </form>
 
@@ -182,7 +180,7 @@ session_start();
 			}}else{ ?>
 			<tr>
 				<td colspan="8">
-			<?php echo $fetchData; ?>
+			<?php echo $fetchHotel; ?>
 		</td>
 			<tr>
 			<?php
