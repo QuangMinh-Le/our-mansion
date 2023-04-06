@@ -28,6 +28,7 @@ session_start();
 		 logined as employee
 		 <br>
          <a href="home_employee.php"> back to home</a> <br><br>
-		 <a href="modifyRoom_employee.php"> add, update, delete rooms</a>
+		 <a href="modifyRoom_employee.php"> add, update, delete rooms</a> <br> 
+		 <a href="modifyHotel_employee.php"> add, update, delete hotel</a>
 </body>
 </html>

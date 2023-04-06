@@ -95,17 +95,19 @@ FOREIGN KEY (room_id) REFERENCES Room (room_id)
 
 CREATE TABLE dbliv2.Booking (
 booking_id INTEGER  UNIQUE AUTO_INCREMENT,
+11
 employee_SSN VARCHAR(64) NOT NULL,
 client_SSN VARCHAR(64) NOT NULL,
 room_id INTEGER NOT NULL,
 startDate DATE,
-endDate DATE, 
+endDate DATE,
+archived BOOLEAN, 
 paid BOOLEAN,
-archived BOOLEAN,
 PRIMARY KEY (booking_id),
 FOREIGN KEY (employee_SSN) REFERENCES Employee (employee_SSN),
 FOREIGN KEY (client_SSN) REFERENCES Client (client_SSN),
-FOREIGN KEY (room_id) REFERENCES Room (room_id)
+FOREIGN KEY (room_id) REFERENCES Room (room_id),
+FOREIGN KEY (reservation_id) REFERENCES Reservation (reservation_id)
 );
 
 
