@@ -8,15 +8,16 @@ $client_data = check_login_customer($con);
 
 if (isset($_POST['reserve'])) {
 	$client_SSN = $client_data['client_SSN'];
-	echo "$client_SSN";
+	echo "$client_SSN    ";
+	
 	$room_id = $_POST['room_id'];
-	echo "$room_id";
-	$startDate = $_POST['startDate'];
-	echo "$startDate";
-	$endDate = $_POST['endDate'];
-	echo "$endDate";
+	echo "$room_id    ";
+	$startDate = date('Y-m-d', strtotime($_POST['startDate']));
+	echo "$startDate    ";
+	$endDate = date('Y-m-d', strtotime($_POST['endDate']));
+	echo "$endDate    ";
 
-	$query ="INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, 'jghasdf', 'gnfcgfd', 0)";
+	$query ="INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
 	try{
 		$result = mysqli_query($con, $query);
  	}catch (Exception $e){
@@ -103,7 +104,7 @@ if (isset($_POST['reserve'])) {
 				foreach ($fetchData as $data) {
 					?>
 					<div class="form">
-						<form>
+						<form method="POST">
 							<h2>
 								<?php echo $data['chain_name'] ?? ''; ?>
 							</h2>
@@ -124,7 +125,7 @@ if (isset($_POST['reserve'])) {
 							</div>
 							<div class="mb-3 hidden">
 								<h4>Room id:
-									<h4 name = "room_id"><?php echo $data['room_id'] ?? ''; ?></h4>
+									<input type = "number" name = "room_id" value= "<?php echo $data['room_id'] ?? ''; ?>"></input>
 								</h4>
 							</div>
 							<div class="mb-3">
@@ -156,11 +157,11 @@ if (isset($_POST['reserve'])) {
 											<div id="reservation_date">
 												<div class="mb-3">
 													<label for="startDate">Start Date</label>
-													<input id="startDate" class="form-control" type="date" name="startDate" required/>
+													<input id="startDate" class="form-control" type="date" name="startDate"/>
 												</div>
 												<div class="mb-3">
 													<label for="startDate">End Date</label>
-													<input id="endDate" class="form-control" type="date" name="endDate" required/>
+													<input id="endDate" class="form-control" type="date" name="endDate"/>
 												</div>
 												<div class="mb-3">
 													<label for="startDate">Total Price:</label>
