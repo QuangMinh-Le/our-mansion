@@ -182,6 +182,7 @@ session_start();
         <th>view</th>
         <th>extandable </th>
         <th>damage</th>
+        
         <th>chain_name</th>
         <th>star rating (1-5)</th>
         <th>city</th>

@@ -5,6 +5,28 @@ session_start();
 	$employee_data = check_login_employee($con);
 	$_SESSION;
 
+    $fetchHotel = fetch_hotel($con);
+
+    function fetch_hotel($db ){
+        if(empty($db)){
+         $msg= "Database connection error";
+       }else{
+       $query = "SELECT * FROM  hotel WHERE 1=1 ORDER BY hotel_id ASC";
+       $result = $db->query($query);
+       if($result== true){ 
+        if ($result->num_rows > 0) {
+           $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+           $msg= $row;
+        } else {
+           $msg= "No Data Found"; 
+        }
+       }else{
+         $msg= mysqli_error($db);
+       }
+       }
+       return $msg;
+       }
+
     if($_SERVER['REQUEST_METHOD']== "POST"){//smt was posted
         if(isset($_POST['edit']) ){
             $room_id = $_POST['room_id'];
@@ -26,15 +48,14 @@ session_start();
             //echo "delete room with room_id= $room_id";
             $result = $con->query($query); 
         }if(isset($_POST['add'])){
-            $room_number1 = $_POST['room_number1'];
-            $hotel_id =$_POST['hotel_id1'];
-            $price = $_POST['price1'];
-            $peopleCapacity = $_POST['peopleCapacity1'];            
-            $view = $_POST['view1'];
-            $extandable =$_POST['extandable1'];
-            $damage = $_POST['damage1'];
-            echo "room_number = $room_number1";
-            $query = "INSERT INTO Room (room_number, hotel_id, price, peopleCapacity, view, extandable,damage) VALUES ($room_number1,$hotel_id,$price,$peopleCapacity, '$view', $extandable, '$damage')";
+            $chain_name = $_POST['chain_name1'];
+            $ratingStars =$_POST['ratingStars1'];
+            $city = $_POST['city1'];
+            $address = $_POST['address1'];            
+            $phone = $_POST['phone1'];
+            $email =$_POST['email1'];
+            //echo "room_number = $room_number1";
+            $query = "INSERT INTO Hotel (chain_name, ratingStars, numberOfRooms, city , address, phone, email) VALUES ('$chain_name',$ratingStars,0,'$city','$address', '$phone', '$email')";
             $result = $con->query($query);
         }
 
@@ -49,7 +70,7 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-	<title> OurMansion | ModifyRooms employee
+	<title> OurMansion | ModifyHotel employee
     	</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style type="text/css"> 
@@ -77,9 +98,9 @@ session_start();
 		</style>
 </head>
 <body>
-        <h1 style= "font-family: fantasy ; text-align: center;">OurMansion - ModifyRooms</h1>
+        <h1 style= "font-family: fantasy ; text-align: center;">OurMansion - ModifyHotel</h1>
 		<a href="logout_employee.php"> Logout</a>
-		<h1>This is the Modify Rooms page</h1>
+		<h1>This is the Modify Hotel page</h1>
 		<br>
 		Hello,<?php echo $employee_data['efullName']; ?>
 		 <br>
@@ -89,15 +110,15 @@ session_start();
 
          <div id="box">
 			<form method="post">
-				<div style="font-size:20px;margin:10px;color:black;color:white;">Add a room</div>
+				<div style="font-size:20px;margin:10px;color:black;color:white;">Add a hotel</div>
 				<br><br>
-				<input id="text" type="text" name="room_number1" placeholder="room_number"><br><br>
-                <input id="text" type="text" name="hotel_id1" placeholder="hotel_id (1-40)"><br><br>
-                <input id="text" type="text" name="price1" placeholder="price $"><br><br>
-                <input id="text" type="text" name="peopleCapacity1" placeholder="peopleCapacity"><br><br>
-                <input id="text"  type="text" name="view1" placeholder="view"><br><br>
-                <input id="text"  type="text" name="extandable1" placeholder="extandable (0-1)"><br><br>
-                <input id="text"  type="text" name="damage1" placeholder="damage description"><br><br>
+				<input id="text" type="text" name="chain_name1" placeholder="chain_name"><br><br>
+                <input id="text" type="text" name="ratingStars1" placeholder="ratingStars (1-5)"><br><br>
+                <input id="text" type="text" name="city1" placeholder="city"><br><br>
+                <input id="text" type="text" name="address1" placeholder="address"><br><br>
+                <input id="text"  type="text" name="phone1" placeholder="phone"><br><br>
+                <input id="text"  type="text" name="email1" placeholder="email"><br><br>
+                
 
 				<input id="button"  type="submit" name="add" value="add"><br><br>
 				
@@ -108,7 +129,7 @@ session_start();
 
 
 
-         <h1 style= " text-align: center;"> Existing rooms to modify:</h1> <br>
+         <h1 style= " text-align: center;"> Existing hotels to modify:</h1> <br>
          <p style= " text-align: center;"> modify the values for a row and then press edit button (you might need to reload twice the page after, for the change to take effect)</p>
 
         <div class="container" style="width: 2500px;"	>
@@ -117,24 +138,21 @@ session_start();
 			<?php echo $deleteMsg??''; ?>
 			<div class="table-responsive">
 			<table class="table table-bordered" >
-			<thead><tr><th>room_id</th>
+			<thead><tr><th>hotel_id</th>
 
-				<th>room_number</th>
-				<th>hotel_id</th>
-				<th style="width: 20%;">price</th>
-				<th>peopleCapacity</th>
-				<th style="width:50%;">view</th>
-				<th>extandable </th>
-				<th style="width:200%;">damage</th>
 				<th>chain_name</th>
-				<th>star rating (1-5)</th>
+				<th>ratingStars</th>
+				<th style="width: 20%;">numberOfRooms</th>
 				<th>city</th>
+				<th style="width:50%;">address</th>
+				<th>phone </th>
+				<th style="width:200%;">email</th>
 			</thead>
             <tbody>
 		<?php
-			if(is_array($fetchData)){      
+			if(is_array($fetchHotel)){      
 			
-			foreach($fetchData as $data){
+			foreach($fetchHotel as $data){
 			?>
 			<tr>
                 <form method="post">
