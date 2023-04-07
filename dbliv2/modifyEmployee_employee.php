@@ -38,7 +38,7 @@ session_start();
             $eaddress = $_POST['eaddress'];
             $jobPosition =$_POST['jobPosition'];
             $epass = $_POST['epass'];
-
+			
             $query ="UPDATE Employee SET hotel_id='$hotel_id', email='$email', efullName='$efullName', eaddress='$eaddress', jobPosition ='$jobPosition', epass='$epass' WHERE employee_SSN = '$employee_SSN'";
             $result = $con->query($query);
 
@@ -57,11 +57,12 @@ session_start();
 			$epass= $_POST['epass1'];
 			if(!empty($employee_SSN) && !empty($hotel_id) && !empty($email  ) && !empty($efullName ) && !empty($eaddress ) && !empty($jobPosition) && !empty($epass)  ){
 				//save to database
+
 				$query = "insert into Employee (employee_SSN, hotel_id, email, efullName, eaddress, jobPosition, epass ) value ('$employee_SSN ', '$hotel_id','$email','$efullName','$eaddress','$jobPosition','$epass' )";
 				mysqli_query($con, $query);
 				
 			}else{
-				echo"Please enter all fields!";
+				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
 			}
         }
 
@@ -149,12 +150,12 @@ session_start();
 			<table class="table table-bordered" >
 			<thead><tr><th>employee_SSN</th>
 
-				<th>hotel_id</th>
+				<th>workplace(hotel_id)</th>
 				<th>email</th>
 				<th style="width: 20%;">efullName</th>
 				<th style="width:25%;">eaddress</th>
 				<th style="width:20%;">jobPosition</th>
-				<th style="width:50%;">epass</th>
+				<th style="width:50%;">epassword</th>
 			</thead>
             <tbody>
 		<?php
@@ -179,7 +180,7 @@ session_start();
                     <td> <input type="submit" name="edit"  value="edit" /></td>
                 </form>
                 <form method="post">
-                    <td><input style="width:0%" name="employee_SSN2" value="<?php echo $data['employee_SSN']??''; ?>" /><input type="submit" name="delete" value="delete"   /></td>
+                    <td><input style="width:0%" name="employee_SSN2" value="<?php echo $data['employee_SSN']??''; ?>" readonly /><input type="submit" name="delete" value="delete"   /></td>
 
                 </form>
 

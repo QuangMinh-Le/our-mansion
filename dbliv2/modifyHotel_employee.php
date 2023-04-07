@@ -55,8 +55,14 @@ session_start();
             $phone = $_POST['phone1'];
             $email =$_POST['email1'];
             //echo "room_number = $room_number1";
-            $query = "INSERT INTO Hotel (chain_name, ratingStars, numberOfRooms, city , address, phone, email) VALUES ('$chain_name',$ratingStars,0,'$city','$address', '$phone', '$email')";
-            $result = $con->query($query);
+            if(!empty($chain_name) && !empty($ratingStars) && !empty($city  ) && !empty($address ) && !empty($phone ) && !empty($email)   ){
+				//save to database
+                $query = "INSERT INTO Hotel (chain_name, ratingStars, numberOfRooms, city , address, phone, email) VALUES ('$chain_name',$ratingStars,0,'$city','$address', '$phone', '$email')";
+                $result = $con->query($query);
+
+            }else{
+				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
+			}
         }
 
 
@@ -171,7 +177,7 @@ session_start();
                     <td> <input type="submit" name="edit"  value="edit" /></td>
                 </form>
                 <form method="post">
-                    <td><input style="width:0%" name="hotel_id2" value="<?php echo $data['hotel_id']??''; ?>" /><input type="submit" name="delete" value="delete"   /></td>
+                    <td><input style="width:0%" name="hotel_id2" value="<?php echo $data['hotel_id']??''; ?>" readonly/><input type="submit" name="delete" value="delete"   /></td>
 
                 </form>
 

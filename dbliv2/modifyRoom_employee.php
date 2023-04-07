@@ -26,16 +26,24 @@ session_start();
             //echo "delete room with room_id= $room_id";
             $result = $con->query($query); 
         }if(isset($_POST['add'])){
-            $room_number1 = $_POST['room_number1'];
+            $room_number = $_POST['room_number1'];
             $hotel_id =$_POST['hotel_id1'];
             $price = $_POST['price1'];
             $peopleCapacity = $_POST['peopleCapacity1'];            
             $view = $_POST['view1'];
             $extandable =$_POST['extandable1'];
             $damage = $_POST['damage1'];
-            echo "room_number = $room_number1";
-            $query = "INSERT INTO Room (room_number, hotel_id, price, peopleCapacity, view, extandable,damage) VALUES ($room_number1,$hotel_id,$price,$peopleCapacity, '$view', $extandable, '$damage')";
-            $result = $con->query($query);
+            //echo "room_number = $room_number";
+			if(!empty($room_number) && !empty($hotel_id) && !empty($price  ) && !empty($peopleCapacity ) && !empty($view ) &&  !empty($extandable) && !empty($damage)  ){
+				//save to database
+				$query = "INSERT INTO Room (room_number, hotel_id, price, peopleCapacity, view, extandable,damage) VALUES ($room_number,$hotel_id,$price,$peopleCapacity, '$view', $extandable, '$damage')";
+            	$result = $con->query($query);
+
+
+			}else{
+				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
+			}
+            
         }
 
 
@@ -155,7 +163,7 @@ session_start();
                     <td> <input type="submit" name="edit"  value="edit" /></td>
                 </form>
                 <form method="post">
-                    <td><input style="width:0%" name="room_id2" value="<?php echo $data['room_id']??''; ?>" /><input type="submit" name="delete" value="delete"   /></td>
+                    <td><input style="width:0%" name="room_id2" value="<?php echo $data['room_id']??''; ?>" readonly /><input type="submit" name="delete" value="delete"   /></td>
 
                 </form>
 

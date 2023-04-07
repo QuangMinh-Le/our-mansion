@@ -78,12 +78,12 @@ session_start();
 			<td><?php echo $data['endDate']??''; ?></td>
 			<td><?php echo $data['archived']??''; ?></td>
 			<td> <form method="post">
-                    <input style="width:0.1%;" name="reservation_id" value="<?php echo $data['reservation_id']??''; ?>"> 
-                    <input style="width:0.1%;" name="client_SSN" value="<?php echo $data['client_SSN']??''; ?>"> 
-                    <input style="width:0.1%;" name="room_id" value="<?php echo $data['room_id']??''; ?>"> 
-                    <input style="width:0.1%;" name="startDate" value="<?php echo $data['startDate']??''; ?>"> 
-                    <input style="width:0.1%;" name="endDate" value="<?php echo $data['endDate']??''; ?>"> 
-                    <input style="width:0.1%;" name="archived" value="<?php echo $data['archived']??''; ?>"> 
+                    <input style="width:0.1%;" name="reservation_id" value="<?php echo $data['reservation_id']??''; ?>" readonly> 
+                    <input style="width:0.1%;" name="client_SSN" value="<?php echo $data['client_SSN']??''; ?>"readonly> 
+                    <input style="width:0.1%;" name="room_id" value="<?php echo $data['room_id']??''; ?>"readonly> 
+                    <input style="width:0.1%;" name="startDate" value="<?php echo $data['startDate']??''; ?>"readonly> 
+                    <input style="width:0.1%;" name="endDate" value="<?php echo $data['endDate']??''; ?>"readonly> 
+                    <input style="width:0.1%;" name="archived" value="<?php echo $data['archived']??''; ?>"readonly> 
                     <input type="submit" value="book reservation" />
                  </form>
             </td>
