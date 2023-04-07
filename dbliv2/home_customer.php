@@ -8,14 +8,9 @@ $client_data = check_login_customer($con);
 
 if (isset($_POST['reserve'])) {
 	$client_SSN = $client_data['client_SSN'];
-	echo "$client_SSN    ";
-	
 	$room_id = $_POST['room_id'];
-	echo "$room_id    ";
 	$startDate = date('Y-m-d', strtotime($_POST['startDate']));
-	echo "$startDate    ";
 	$endDate = date('Y-m-d', strtotime($_POST['endDate']));
-	echo "$endDate    ";
 
 	$query ="INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
 	try{
