@@ -43,7 +43,10 @@ session_start();
 		Hello, <?php echo $client_data['cFullName']; ?>
 		<br>
 		 logined as customer
-		 <br><br><br>
+		 <br>
+		 <a href="modifyInfo_customer.php"> modify your infos</a>
+		 <br><br>
+		 
 		 <h1 style= " text-align: center;"> Existing rooms to reserve:</h1>
 
 
