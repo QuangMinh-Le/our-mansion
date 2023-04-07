@@ -8,6 +8,8 @@ $client_data = check_login_customer($con);
 
 if (isset($_POST['reserve'])) {
 	$client_SSN = $client_data['client_SSN'];
+	echo "$client_SSN    ";
+	
 	$room_id = $_POST['room_id'];
 	$startDate = date('Y-m-d', strtotime($_POST['startDate']));
 	$endDate = date('Y-m-d', strtotime($_POST['endDate']));
