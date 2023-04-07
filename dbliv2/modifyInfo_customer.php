@@ -86,7 +86,7 @@ session_start();
 		<br>
 		Hello,<?php echo $client_data['cFullName']; ?>
 		 <br>
-		 logined as employee
+		 logined as customer
 		 <br>
          <a href="home_customer.php"> back to home</a> <br><br>
 
@@ -99,7 +99,7 @@ session_start();
 			<?php echo $deleteMsg??''; ?>
 			<div class="table-responsive">
 			<table class="table table-bordered" >
-			<thead><tr><th>client_SSN</th>
+			<thead><tr><th>client_SSN (readonly)</th>
 				<th style="width: 20%;">email</th>
 				<th style="width: 20%;">cFullName</th>
 				<th style="width:25%;">caddress</th>

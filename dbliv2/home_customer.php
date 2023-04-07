@@ -42,9 +42,12 @@ session_start();
 		<br>
 		Hello, <?php echo $client_data['cFullName']; ?>
 		<br>
-		 logined as customer
+		 logined as customer, options:
 		 <br>
-		 <a href="modifyInfo_customer.php"> modify your infos</a>
+		 <a href="modifyInfo_customer.php"> modify your infos</a><br>
+		 
+		 <a href="YourActivity_customer.php">see your activity (bookings, reservations)</a>
+
 		 <br><br>
 		 
 		 <h1 style= " text-align: center;"> Existing rooms to reserve:</h1>
