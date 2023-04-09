@@ -21,9 +21,9 @@ session_start();
 					die;
 				}
 			}
-			echo"Wrong username or password!";
+			echo"<h1 style= \"color:red ; text-align: center;\">Wrong username or password!</h1>";
 		}else{
-			echo"Wrong username or password!";
+			echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
 		}
 	}
 ?>

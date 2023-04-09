@@ -73,19 +73,27 @@ if (isset($_POST['reserve'])) {
 </style>
 
 <body>
-	<h1 style="font-family: fantasy ; text-align: center;">OurMansion</h1>
-	<a href="logout_customer.php"> Logout</a>
-	<h1>This is the home page</h1>
-	<br>
-	Hello,
-	<?php echo $client_data['cFullName']; ?>
-	<br>
-	logined as customer
-	<br><br><br>
-	<h1 style=" text-align: center;"> Existing rooms to reserve:</h1>
+
+        <h1 style= "font-family: fantasy ; text-align: center;">OurMansion</h1>
+		<a href="logout_customer.php"> Logout</a>
+		<h1>This is the home page</h1>
+		<br>
+		Hello, <?php echo $client_data['cFullName']; ?>
+		<br>
+		 logined as customer, options:
+		 <br>
+		 <a href="modifyInfo_customer.php"> modify your infos</a><br>
+		 
+		 <a href="YourActivity_customer.php">see your activity (bookings, reservations)</a>
+
+		 <br><br>
+		 
+		 <h1 style= " text-align: center;"> Existing rooms to reserve:</h1>
 
 
-	<div class="container" style="width: 2500px;">
+		<div class="container" style="width: 2500px;"	>
+
+
 		<div class="row" style="width: 2500px;margin: 0.1%;">
 			<div class="col-sm-8">
 				<?php echo $deleteMsg ?? ''; ?>

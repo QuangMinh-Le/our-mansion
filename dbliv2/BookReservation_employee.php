@@ -5,6 +5,47 @@ session_start();
 	$employee_data = check_login_employee($con);
 	$_SESSION;
 
+	
+	$tableName1="reservation";
+	$fetchReservation = fetch_reservations($db, $tableName1);
+
+   function fetch_reservations($db, $tableName){
+	if(empty($db)){
+		$msg= "Database connection error";
+		}elseif(empty($tableName)){
+		$msg= "Table Name is empty";
+	}else{
+		$query = "SELECT * FROM $tableName"." ORDER BY reservation_id ASC";
+		$result = $db->query($query);
+		if($result== true){ 
+			if ($result->num_rows > 0) {
+				$row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+				$msg= $row;
+			} else {
+			 	$msg= "No Data Found"; 
+			}
+		}else{
+			$msg= mysqli_error($db);
+		}
+	}
+	return $msg;
+   }
+
+   function bookReservation ($con, $reservation_id, $employee_SSN, $client_SSN, $room_id, $startDate, $endDate, $archived  ){
+		$query = "INSERT INTO Booking (reservation_id,employee_SSN, client_SSN, room_id, startDate, endDate, archived, paid) VALUE ('$reservation_id','$employee_SSN','$client_SSN','$room_id', '$startDate','$endDate', '$archived', FALSE )";
+		$result = mysqli_query($con, $query);
+		if($result)
+		{
+			echo "<p> Booking created for reservation_id '$reservation_id' ! </p> ";
+
+		}
+		else
+		{
+			echo "<p> Booking counldn't be created! Maybe booking already exist for this reservation !</p>";
+
+		}
+   }
+
     if($_SERVER['REQUEST_METHOD']== "POST"){//smt was posted
         $reservation_id = $_POST['reservation_id'];
         $employee_SSN = $employee_data['employee_SSN'];
@@ -78,12 +119,12 @@ session_start();
 			<td><?php echo $data['endDate']??''; ?></td>
 			<td><?php echo $data['archived']??''; ?></td>
 			<td> <form method="post">
-                    <input style="width:0.1%;" name="reservation_id" value="<?php echo $data['reservation_id']??''; ?>"> 
-                    <input style="width:0.1%;" name="client_SSN" value="<?php echo $data['client_SSN']??''; ?>"> 
-                    <input style="width:0.1%;" name="room_id" value="<?php echo $data['room_id']??''; ?>"> 
-                    <input style="width:0.1%;" name="startDate" value="<?php echo $data['startDate']??''; ?>"> 
-                    <input style="width:0.1%;" name="endDate" value="<?php echo $data['endDate']??''; ?>"> 
-                    <input style="width:0.1%;" name="archived" value="<?php echo $data['archived']??''; ?>"> 
+                    <input style="width:0.1%;" name="reservation_id" value="<?php echo $data['reservation_id']??''; ?>" readonly> 
+                    <input style="width:0.1%;" name="client_SSN" value="<?php echo $data['client_SSN']??''; ?>"readonly> 
+                    <input style="width:0.1%;" name="room_id" value="<?php echo $data['room_id']??''; ?>"readonly> 
+                    <input style="width:0.1%;" name="startDate" value="<?php echo $data['startDate']??''; ?>"readonly> 
+                    <input style="width:0.1%;" name="endDate" value="<?php echo $data['endDate']??''; ?>"readonly> 
+                    <input style="width:0.1%;" name="archived" value="<?php echo $data['archived']??''; ?>"readonly> 
                     <input type="submit" value="book reservation" />
                  </form>
             </td>

@@ -29,7 +29,13 @@ session_start();
 		 <br>
          <a href="home_employee.php"> back to home</a> <br><br>
 		 <a href="modifyRoom_employee.php"> add, update, delete rooms</a> <br> 
-		 <a href="modifyHotel_employee.php"> add, update, delete hotel</a> <br>
-		 <a href="modifyEmployee_employee.php"> add, update, delete employee</a>
+
+		 <a href="modifyAmenities_employee.php"> add, update, delete room amenities</a> <br> 
+		 <a href="modifyHotel_employee.php"> add, update, delete hotels</a> <br>
+		 <a href="modifyHotelChain_employee.php"> add, update, delete hotel chain</a> <br>
+		 <a href="modifyEmployee_employee.php"> add, update, delete employees</a><br>
+		 <a href="modifyManager_employee.php"> add, update, delete manager</a><br>
+		 <a href="modifyCustomer_employee.php"> add, update, delete customers</a>
+
 </body>
 </html>
