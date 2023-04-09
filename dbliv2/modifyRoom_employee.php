@@ -36,9 +36,15 @@ session_start();
             //echo "room_number = $room_number";
 			if(!empty($room_number) && !empty($hotel_id) && !empty($price  ) && !empty($peopleCapacity ) && !empty($view ) &&  !empty($extandable) && !empty($damage)  ){
 				//save to database
-				$query = "INSERT INTO Room (room_number, hotel_id, price, peopleCapacity, view, extandable,damage) VALUES ($room_number,$hotel_id,$price,$peopleCapacity, '$view', $extandable, '$damage')";
-            	$result = $con->query($query);
-
+				try{
+					$query = "INSERT INTO Room (room_number, hotel_id, price, peopleCapacity, view, extandable,damage) VALUES ($room_number,$hotel_id,$price,$peopleCapacity, '$view', $extandable, '$damage')";
+					$result = $con->query($query);
+				}catch (Exception $e){
+					
+					echo "<h1 style= \"color:red ; text-align: center;\"> Error! There must be a problem with the type of your input</h1>";
+					echo $e->getMessage();
+					//exit;
+				}
 
 			}else{
 				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
@@ -100,11 +106,33 @@ session_start();
 				<div style="font-size:20px;margin:10px;color:black;color:white;">Add a room</div>
 				<br><br>
 				<input id="text" type="text" name="room_number1" placeholder="room_number"><br><br>
-                <input id="text" type="text" name="hotel_id1" placeholder="hotel_id (1-40)"><br><br>
+                
+                <select name="hotel_id1">
+                    <option value="">Select hotel_id</option>
+                    <?php 
+                        $query ="SELECT DISTINCT hotel_id FROM hotel";
+                        $result = $con->query($query);
+                        if($result->num_rows> 0){
+                            while($optionData=$result->fetch_assoc()){
+                            $option =$optionData['hotel_id'];
+                            //$id =$optionData['hotel_id'];
+                        ?>
+                        <option value="<?php echo $option; ?>" ><?php echo $option; ?> </option>
+                    <?php
+                    }}
+                    ?>
+                </select>
+				
+				<br><br>
                 <input id="text" type="text" name="price1" placeholder="price $"><br><br>
                 <input id="text" type="text" name="peopleCapacity1" placeholder="peopleCapacity"><br><br>
                 <input id="text"  type="text" name="view1" placeholder="view"><br><br>
-                <input id="text"  type="text" name="extandable1" placeholder="extandable (0-1)"><br><br>
+                <select name="extandable1"> 
+					<option value="">Select extandable(0-1) </option>
+					<option value="0"> 0 </option>
+					<option value ="1"> 1</option>
+				</select>
+				<br><br>
                 <input id="text"  type="text" name="damage1" placeholder="damage description"><br><br>
 
 				<input id="button"  type="submit" name="add" value="add"><br><br>

@@ -41,9 +41,12 @@ session_start();
 
         }if(isset($_POST['delete'])){
             $client_SSN = $_POST['client_SSN2'];
-            $query = "DELETE FROM  client  WHERE client_SSN=$client_SSN";
+            //$query = "DELETE FROM  client  WHERE client_SSN=$client_SSN";
             //echo "delete hotel with hotel_id= $hotel_id";
-            $result = $con->query($query); 
+			echo "<h1 style= \"color:red ; text-align: center;\"> cannot delete all info of an client due to reservations and bookings depending on it</h1>";
+			echo "<h1 style= \"color:red ; text-align: center;\">  partial deletion of client in database</h1>";
+            $query ="UPDATE client SET cmail=NULL, cFullName='', caddress='',  cpass='' WHERE client_SSN = '$client_SSN'";
+			$result = $con->query($query); 
         }if(isset($_POST['add'])){
             $client_SSN = $_POST['client_SSN1'];
             $cmail = $_POST['cmail1'];
@@ -51,10 +54,12 @@ session_start();
             $caddress = $_POST['caddress1'];
             $cpass= $_POST['cpass1'];
             if(!empty($client_SSN)  && !empty($cmail  ) && !empty($cFullName) && !empty($caddress )  && !empty($cpass)  ){//save to database
-
-				$query = "insert into Client (client_SSN,  cmail, cFullName, caddress, cpass ) value ('$client_SSN', '$cmail','$cFullName','$caddress','$cpass' )";
-				mysqli_query($con, $query);
-				
+				try{
+					$query = "insert into Client (client_SSN,  cmail, cFullName, caddress, cpass ) value ('$client_SSN', '$cmail','$cFullName','$caddress','$cpass' )";
+					mysqli_query($con, $query);
+				}catch (Exception $e ){ echo"<h1 style= \"color:red ; text-align: center;\">error, client_SSN or email already used!</h1>";
+                    echo $e->getMessage();
+                }
 			}else{
 				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
 			}
@@ -145,6 +150,7 @@ session_start();
 				<th style="width: 20%;">cFullName</th>
 				<th style="width:25%;">caddress</th>
 				<th style="width:50%;">cpassword</th>
+				<th style="width:200%;">Date of sign up</th>
 			</thead>
             <tbody>
 		<?php
@@ -161,6 +167,7 @@ session_start();
                     <td><input name="cFullName" value="<?php echo $data['cFullName']??''; ?>" style="width:75%;" ></td>
                     <td><input name="caddress" value="<?php echo $data['caddress']??''; ?>" style="width:50%;"></td>
                     <td><input name="cpass" value="<?php echo $data['cpass']??''; ?>" style="width:50%;"></td>
+					<td> <?php echo $data['registrationDate']?></td>
 
                     <td> <input type="submit" name="edit"  value="edit" /></td>
                 </form>

@@ -41,9 +41,12 @@ session_start();
 
         }if(isset($_POST['delete'])){
             $chain_name = $_POST['chain_name2'];
-            $query = "DELETE FROM Hotelchain WHERE chain_name= '$chain_name'";
-            
-            $result = $con->query($query); 
+			try {
+            	$query = "DELETE FROM Hotelchain WHERE chain_name= '$chain_name'";
+            	$result = $con->query($query); 
+			}catch (Exception $e ){ echo"<h1 style= \"color:red ; text-align: center;\">error, chain-name has multiple hotels, <br> please delete all hotels belonging to this chain first!</h1>";
+				echo $e->getMessage();
+			}
         }if(isset($_POST['add'])){
             $chain_name = $_POST['chain_name1'];
             $address = $_POST['address1'];            
@@ -52,8 +55,12 @@ session_start();
             //echo "room_number = $room_number1";
             if(!empty($chain_name)  && !empty($address ) && !empty($phone ) && !empty($email)   ){
 				//save to database
-                $query = "INSERT INTO Hotelchain (chain_name, centralAddress , centralPhone , centralEmail,numberOfHotels  ) VALUES ('$chain_name','$address', '$phone', '$email', 0)";
-                $result = $con->query($query);
+				try {
+					$query = "INSERT INTO Hotelchain (chain_name, centralAddress , centralPhone , centralEmail,numberOfHotels  ) VALUES ('$chain_name','$address', '$phone', '$email', 0)";
+					$result = $con->query($query);
+				}catch (Exception $e ){ echo"<h1 style= \"color:red ; text-align: center;\">error, chain-name already exists!</h1>";
+                    echo $e->getMessage();
+                }
 
             }else{
 				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
@@ -155,7 +162,7 @@ session_start();
                 <form method="post">
                     
 
-                    <td><input name="chain_name" value="<?php echo $data['chain_name']??''; ?>" style="width:100%;"></td>
+                    <td><input name="chain_name" value="<?php echo $data['chain_name']??''; ?>" style="width:100%;"readonly></td>
                 
                     <td><input name="address" value="<?php echo $data['centralAddress']??''; ?>" style="width:110%;"></td>
                     <td><input name="phone" value="<?php echo $data['centralPhone']??''; ?>" style="width:50%;"></td>

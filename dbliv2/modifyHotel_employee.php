@@ -44,9 +44,16 @@ session_start();
 
         }if(isset($_POST['delete'])){
             $hotel_id = $_POST['hotel_id2'];
-            $query = "DELETE FROM Hotel WHERE hotel_id=$hotel_id";
-            //echo "delete hotel with hotel_id= $hotel_id";
-            $result = $con->query($query); 
+            try{
+                $query = "DELETE FROM Hotel WHERE hotel_id=$hotel_id";
+                //echo "delete hotel with hotel_id= $hotel_id";
+                $result = $con->query($query);
+            }catch (Exception $e){
+                echo "<h1 style= \"color:red; text-align: center;\"> The hotel has rooms, please delete them first! and then try again!</h1>";
+                echo $e->getMessage();
+                //exit;
+            }
+             
         }if(isset($_POST['add'])){
             $chain_name = $_POST['chain_name1'];
             $ratingStars =$_POST['ratingStars1'];
@@ -57,9 +64,14 @@ session_start();
             //echo "room_number = $room_number1";
             if(!empty($chain_name) && !empty($ratingStars) && !empty($city  ) && !empty($address ) && !empty($phone ) && !empty($email)   ){
 				//save to database
-                $query = "INSERT INTO Hotel (chain_name, ratingStars, numberOfRooms, city , address, phone, email) VALUES ('$chain_name',$ratingStars,0,'$city','$address', '$phone', '$email')";
-                $result = $con->query($query);
-
+                try{
+                    $query = "INSERT INTO Hotel (chain_name, ratingStars, numberOfRooms, city , address, phone, email) VALUES ('$chain_name',$ratingStars,0,'$city','$address', '$phone', '$email')";
+                    $result = $con->query($query);
+                }catch (Exception $e){
+                    echo "<h1 style= \"color:red; text-align: center;\"> Either the address, the phone or the email is already used</h1>";
+                    echo $e->getMessage();
+                    //exit;
+                }
             }else{
 				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
 			}
@@ -118,8 +130,31 @@ session_start();
 			<form method="post">
 				<div style="font-size:20px;margin:10px;color:black;color:white;">Add a hotel</div>
 				<br><br>
-				<input id="text" type="text" name="chain_name1" placeholder="chain_name"><br><br>
-                <input id="text" type="text" name="ratingStars1" placeholder="ratingStars (1-5)"><br><br>
+				<select name="chain_name1">
+                    <option value="">Select Hotel chain</option>
+                    <?php 
+                        $query ="SELECT DISTINCT chain_name FROM hotelchain";
+                        $result = $con->query($query);
+                        if($result->num_rows> 0){
+                            while($optionData=$result->fetch_assoc()){
+                            $option =$optionData['chain_name'];
+                            //$id =$optionData['hotel_id'];
+                        ?>
+                        <option value="<?php echo $option; ?>" ><?php echo $option; ?> </option>
+                    <?php
+                    }}
+                    ?>
+                </select>
+                <br><br>
+                <select name="ratingStars1">
+                    <option value="">Select rating categorie</option>
+                    <option value="1" >1 </option>
+                    <option value="2" >2 </option>
+                    <option value="3" >3 </option>
+                    <option value="4" >4 </option>
+                    <option value="5" >5 </option>
+                </select>
+                <br><br>
                 <input id="text" type="text" name="city1" placeholder="city"><br><br>
                 <input id="text" type="text" name="address1" placeholder="address"><br><br>
                 <input id="text"  type="text" name="phone1" placeholder="phone"><br><br>
@@ -152,7 +187,7 @@ session_start();
 				<th style="width:25%;">city</th>
 				<th style="width:20%;">address</th>
 				<th style="width:50%;">phone </th>
-				<th style="width:500px;">email</th>
+				<th style="width:2000px;">email</th>
 			</thead>
             <tbody>
 		<?php
@@ -170,7 +205,7 @@ session_start();
                     <td><input name="city" value="<?php echo $data['city']??''; ?>" style="width:50%;"></td>
                     <td><input name="address" value="<?php echo $data['address']??''; ?>" style="width:110%;"></td>
                     <td><input name="phone" value="<?php echo $data['phone']??''; ?>" style="width:50%;"></td>
-                    <td><input name="email" value="<?php echo $data['email']??''; ?>" style="width:200%;"></td>
+                    <td><input name="email" value="<?php echo $data['email']??''; ?>" style="width:100%;"></td>
 
                     
 

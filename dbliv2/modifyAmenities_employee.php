@@ -45,7 +45,7 @@ session_start();
             $query = "DELETE FROM Amenities WHERE room_id=$room_id";
             //echo "delete hotel with hotel_id= $hotel_id";
             $result = $con->query($query); 
-        }if(isset($_POST['add'])){
+        }if(isset($_POST['add'] )){
             $room_id = $_POST['room_id1'];
             $TV =$_POST['TV1'];
             $AC = $_POST['AC1'];
@@ -55,9 +55,13 @@ session_start();
             //echo "room_number = $room_number1";
             if(!empty($room_id) && !empty($TV) && !empty($AC  ) && !empty($fridge ) && !empty($kitchen )   ){
 				//save to database
-                $query = "INSERT INTO Amenities (room_id, TV, AC, fridge , kitchen) VALUES ($room_id,$TV,$AC,$fridge,$kitchen)";
-                $result = $con->query($query);
-                //echo "inserted";
+				try {
+					$query = "INSERT INTO Amenities (room_id, TV, AC, fridge , kitchen) VALUES ($room_id,$TV,$AC,$fridge,$kitchen)";
+					$result = $con->query($query);
+					//echo "inserted";
+				}catch (Exception $e ){ echo"<h1 style= \"color:red ; text-align: center;\">error, room id has already a amenity list!</h1>";
+                    echo $e->getMessage();
+                }
 
             }else{
 				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
@@ -117,7 +121,22 @@ session_start();
 			<form method="post">
 				<div style="font-size:20px;margin:10px;color:black;color:white;">Add Amenities for a existing room</div>
 				<br><br>
-				<input id="text" type="text" name="room_id1" placeholder="room_id"><br><br>
+				
+				<select name="room_id1">
+					<option value="">Select room_id</option>
+					<?php 
+						$query ="SELECT DISTINCT room_id FROM room";
+						$result = $con->query($query);
+						if($result->num_rows> 0){
+							while($optionData=$result->fetch_assoc()){
+							$option =$optionData['room_id'];
+							//$id =$optionData['hotel_id'];
+						?>
+						<option value="<?php echo $option; ?>" ><?php echo $option; ?> </option>
+					<?php
+					}}
+					?>
+           	 	</select><br><br>
                 <input id="text" type="text" name="TV1" placeholder="TV (0-1)"><br><br>
                 <input id="text" type="text" name="AC1" placeholder="AC (0-1)"><br><br>
                 <input id="text" type="text" name="fridge1" placeholder="fridge (0-1)"><br><br>

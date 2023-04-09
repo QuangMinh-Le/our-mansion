@@ -44,9 +44,18 @@ session_start();
 
         }if(isset($_POST['delete'])){
             $employee_SSN = $_POST['employee_SSN2'];
-            $query = "DELETE FROM employee WHERE employee_SSN=$employee_SSN";
+			echo "<h1 style= \"color:red ; text-align: center;\"> cannot delete all info of an employee due to reservations and bookings depending on it</h1>";
+			echo "<h1 style= \"color:red ; text-align: center;\">  partial deletion of employee in database</h1>";
+			$query ="UPDATE Employee SET hotel_id=NULL, email = NULL, efullName='', eaddress='', jobPosition ='', epass='' WHERE employee_SSN = '$employee_SSN'";
+			$result = $con->query($query); 
+			/*try{
+            	$query = "DELETE FROM employee WHERE employee_SSN=$employee_SSN";
+				$result = $con->query($query); 
             //echo "delete hotel with hotel_id= $hotel_id";
-            $result = $con->query($query); 
+			}catch (Exception $e ){ echo"<h1 style= \"color:red ; text-align: center;\">error, employee is a manager,<br> please remove him from his function first!</h1>";
+				echo $e->getMessage();
+			}*/
+            
         }if(isset($_POST['add'])){
             $employee_SSN = $_POST['employee_SSN1'];
 			$hotel_id = $_POST['hotel_id1'];
@@ -57,10 +66,12 @@ session_start();
 			$epass= $_POST['epass1'];
 			if(!empty($employee_SSN) && !empty($hotel_id) && !empty($email  ) && !empty($efullName ) && !empty($eaddress ) && !empty($jobPosition) && !empty($epass)  ){
 				//save to database
-
-				$query = "insert into Employee (employee_SSN, hotel_id, email, efullName, eaddress, jobPosition, epass ) value ('$employee_SSN ', '$hotel_id','$email','$efullName','$eaddress','$jobPosition','$epass' )";
-				mysqli_query($con, $query);
-				
+				try{
+					$query = "insert into Employee (employee_SSN, hotel_id, email, efullName, eaddress, jobPosition, epass ) value ('$employee_SSN ', '$hotel_id','$email','$efullName','$eaddress','$jobPosition','$epass' )";
+					mysqli_query($con, $query);
+				}catch (Exception $e ){ echo"<h1 style= \"color:red ; text-align: center;\">error,employee_SSN or email already used!</h1>";
+                    echo $e->getMessage();
+                }
 			}else{
 
 				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
@@ -122,7 +133,23 @@ session_start();
 				<div style="font-size:20px;margin:10px;color:black;color:white;">Add an Employee</div>
 				<br><br>
 				<input id="text" type="text" name="employee_SSN1" placeholder="employee_SSN"><br><br>
-				<input id="text" type="text" name="hotel_id1" placeholder="hotel_id VALUES BETWEEN(1-40)"><br><br>
+				
+                <select name="hotel_id1">
+                    <option value="">Select hotel_id</option>
+                    <?php 
+                        $query ="SELECT DISTINCT hotel_id FROM hotel";
+                        $result = $con->query($query);
+                        if($result->num_rows> 0){
+                            while($optionData=$result->fetch_assoc()){
+                            $option =$optionData['hotel_id'];
+                            //$id =$optionData['hotel_id'];
+                        ?>
+                        <option value="<?php echo $option; ?>" ><?php echo $option; ?> </option>
+                    <?php
+                    }}
+                    ?>
+                </select>
+				<br><br>
 				<input id="text" type="text" name="email1" placeholder="email/username"><br><br>
 				<input id="text" type="text" name="efullName1" placeholder="fullName"><br><br>
 				<input id="text" type="text" name="eaddress1" placeholder="address"><br><br>
@@ -155,9 +182,9 @@ session_start();
 
 				<th>workplace(hotel_id)</th>
 
-				<th>email</th>
+				<th style="width: 50%;">email</th>
 				<th style="width: 20%;">efullName</th>
-				<th style="width:25%;">eaddress</th>
+				<th style="width:50%;">eaddress</th>
 				<th style="width:20%;">jobPosition</th>
 
 				<th style="width:50%;">epassword</th>
@@ -176,9 +203,9 @@ session_start();
                     <td><input name="hotel_id" value="<?php echo $data['hotel_id']??''; ?>" style="width:100%;"></td>
                     <td><input name="email" value="<?php echo $data['email']??''; ?>" style="width:50%;"></td>
                     <td><input name="efullName" value="<?php echo $data['efullName']??''; ?>" style="width:75%;" ></td>
-                    <td><input name="eaddress" value="<?php echo $data['eaddress']??''; ?>" style="width:50%;"></td>
+                    <td><input name="eaddress" value="<?php echo $data['eaddress']??''; ?>" style="width:75%;"></td>
                     <td><input name="jobPosition" value="<?php echo $data['jobPosition']??''; ?>" style="width:110%;"></td>
-                    <td><input name="epass" value="<?php echo $data['epass']??''; ?>" style="width:50%;"></td>
+                    <td><input name="epass" value="<?php echo $data['epass']??''; ?>" style="width:75%;"></td>
                     
 
                     

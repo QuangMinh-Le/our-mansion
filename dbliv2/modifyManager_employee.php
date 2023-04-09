@@ -33,15 +33,18 @@ session_start();
             $query = "DELETE FROM Manager WHERE hotel_id=$hotel_id";
             //echo "delete hotel with hotel_id= $hotel_id";
             $result = $con->query($query); 
-        }if(isset($_POST['add'])){
+        }if(isset($_POST['add']) && isset($_POST['hotel_id1'])){
             $employee_SSN = $_POST['employee_SSN1'];
 			$hotel_id = $_POST['hotel_id1'];
 			
 			if(!empty($employee_SSN) && !empty($hotel_id)  ){
 				//save to database
-
-				$query = "insert into Manager (hotel_id, employee_SSN ) value ('$hotel_id','$employee_SSN ' )";
-				mysqli_query($con, $query);
+                try {
+                    $query = "insert into Manager (hotel_id, employee_SSN ) value ('$hotel_id','$employee_SSN ' )";
+                    mysqli_query($con, $query);
+                }catch (Exception $e ){ echo"<h1 style= \"color:red ; text-align: center;\">error, hotel id has already a manager!</h1>";
+                    echo $e->getMessage();
+                }
 				
 			}else{
 				echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
@@ -99,10 +102,40 @@ session_start();
 
          <div id="box">
 			<form method="post">
-				<div style="font-size:20px;margin:10px;color:black;color:white;">Add an Employee</div>
+				<div style="font-size:20px;margin:10px;color:black;color:white;">Add an Manager</div>
 				<br><br>
-				<input id="text" type="text" name="hotel_id1" placeholder="hotel_id VALUES BETWEEN(1-40)"><br><br>
-                <input id="text" type="text" name="employee_SSN1" placeholder="employee_SSN"><br><br>
+				
+                <select name="hotel_id1">
+                    <option value="">Select hotel_id</option>
+                    <?php 
+                        $query ="SELECT DISTINCT hotel_id FROM hotel";
+                        $result = $con->query($query);
+                        if($result->num_rows> 0){
+                            while($optionData=$result->fetch_assoc()){
+                            $option =$optionData['hotel_id'];
+                            //$id =$optionData['hotel_id'];
+                        ?>
+                        <option value="<?php echo $option; ?>" ><?php echo $option; ?> </option>
+                    <?php
+                    }}
+                    ?>
+                </select>
+                <br><br>
+                <select name="employee_SSN1">
+                    <option value="">Select employee_SSN</option>
+                    <?php 
+                        $query ="SELECT DISTINCT employee_SSN FROM employee";
+                        $result = $con->query($query);
+                        if($result->num_rows> 0){
+                            while($optionData=$result->fetch_assoc()){
+                            $option =$optionData['employee_SSN'];
+                            //$id =$optionData['hotel_id'];
+                        ?>
+                        <option value="<?php echo $option; ?>" ><?php echo $option; ?> </option>
+                    <?php
+                    }}
+                    ?>
+                 </select>
 				
                 
 
@@ -137,7 +170,7 @@ session_start();
 			<tr>
                 <form method="post">
                     <td><input name="hotel_id" value="<?php echo $data['hotel_id']??''; ?>" style="width:100%;" readonly></td>
-                    <td><input name="employee_SSN" value="<?php echo $data['employee_SSN']??''; ?>" style="width:100%;" ></td>
+                    <td><input name="employee_SSN" value="<?php echo $data['employee_SSN']??''; ?>" style="width:100%;" readonly></td>
 
                     
                 </form>
