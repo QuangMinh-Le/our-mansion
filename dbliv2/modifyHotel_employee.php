@@ -38,9 +38,15 @@ session_start();
             $address = $_POST['address'];
             $phone =$_POST['phone'];
             $email = $_POST['email'];
-
-            $query ="UPDATE hotel SET chain_name='$chain_name', ratingStars=$ratingStars, city='$city', address='$address', phone ='$phone', email='$email' WHERE hotel_id = $hotel_id";
-            $result = $con->query($query);
+            try{
+                $query ="UPDATE hotel SET chain_name='$chain_name', ratingStars=$ratingStars, city='$city', address='$address', phone ='$phone', email='$email' WHERE hotel_id = $hotel_id";
+                $result = $con->query($query);
+            }catch (Exception $e){
+					
+                echo "<h1 style= \"color:red ; text-align: center;\"> Error! There must be a problem with the type of your input</h1>";
+                echo $e->getMessage();
+                //exit;
+            }
 
         }if(isset($_POST['delete'])){
             $hotel_id = $_POST['hotel_id2'];

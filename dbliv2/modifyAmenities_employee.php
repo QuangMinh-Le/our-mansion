@@ -36,10 +36,15 @@ session_start();
                      
             $fridge = $_POST['fridge'];            
             $kitchen = $_POST['kitchen'];
-
-            $query ="UPDATE Amenities SET TV=$TV, AC=$AC, fridge=$fridge, kitchen=$kitchen WHERE room_id = $room_id";
-            $result = $con->query($query);
-
+			try{
+            	$query ="UPDATE Amenities SET TV=$TV, AC=$AC, fridge=$fridge, kitchen=$kitchen WHERE room_id = $room_id";
+            	$result = $con->query($query);
+			}catch (Exception $e){
+					
+				echo "<h1 style= \"color:red ; text-align: center;\"> Error! There must be a problem with the type of your input</h1>";
+				echo $e->getMessage();
+				//exit;
+			}
         }if(isset($_POST['delete'])){
             $room_id = $_POST['room_id2'];
             $query = "DELETE FROM Amenities WHERE room_id=$room_id";

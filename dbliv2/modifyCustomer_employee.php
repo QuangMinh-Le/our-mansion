@@ -35,9 +35,15 @@ session_start();
             $cFullName = $_POST['cFullName'];
             $caddress = $_POST['caddress'];
             $cpass= $_POST['cpass'];
-			
-            $query ="UPDATE client SET cmail='$cmail', cFullName='$cFullName', caddress='$caddress',  cpass='$cpass' WHERE client_SSN = '$client_SSN'";
-            $result = $con->query($query);
+			try{
+            	$query ="UPDATE client SET cmail='$cmail', cFullName='$cFullName', caddress='$caddress',  cpass='$cpass' WHERE client_SSN = '$client_SSN'";
+            	$result = $con->query($query);
+			}catch (Exception $e){
+					
+				echo "<h1 style= \"color:red ; text-align: center;\"> Error! There must be a problem with the type of your input</h1>";
+				echo $e->getMessage();
+				//exit;
+			}
 
         }if(isset($_POST['delete'])){
             $client_SSN = $_POST['client_SSN2'];

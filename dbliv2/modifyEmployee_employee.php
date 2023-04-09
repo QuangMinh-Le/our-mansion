@@ -38,10 +38,15 @@ session_start();
             $eaddress = $_POST['eaddress'];
             $jobPosition =$_POST['jobPosition'];
             $epass = $_POST['epass'];
-
-            $query ="UPDATE Employee SET hotel_id='$hotel_id', email='$email', efullName='$efullName', eaddress='$eaddress', jobPosition ='$jobPosition', epass='$epass' WHERE employee_SSN = '$employee_SSN'";
-            $result = $con->query($query);
-
+			try{
+	            $query ="UPDATE Employee SET hotel_id='$hotel_id', email='$email', efullName='$efullName', eaddress='$eaddress', jobPosition ='$jobPosition', epass='$epass' WHERE employee_SSN = '$employee_SSN'";
+    	        $result = $con->query($query);
+			}catch (Exception $e){
+					
+				echo "<h1 style= \"color:red ; text-align: center;\"> Error! There must be a problem with the type of your input</h1>";
+				echo $e->getMessage();
+				//exit;
+			}
         }if(isset($_POST['delete'])){
             $employee_SSN = $_POST['employee_SSN2'];
 			echo "<h1 style= \"color:red ; text-align: center;\"> cannot delete all info of an employee due to reservations and bookings depending on it</h1>";
