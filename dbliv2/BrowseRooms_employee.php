@@ -237,7 +237,7 @@ session_start();
 			<td><?php echo $data['city']??''; ?></td>  
             <td><?php echo $data['numberOfRooms']??''; ?></td> 
 			<td><form method="post">
-                <input style="width:0%" name="room_id" value="<?php echo $data['room_id']??''; ?>" readonly /> 
+                <input style="width:0%; display: none;" name="room_id" value="<?php echo $data['room_id']??''; ?>" readonly /> 
                 <select name="client_SSN">
                     <option value="">Select client_SSN</option>
                     <?php 

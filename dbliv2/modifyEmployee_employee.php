@@ -219,7 +219,7 @@ session_start();
                 </form>
                 <form method="post">
 
-                    <td><input style="width:0%" name="employee_SSN2" value="<?php echo $data['employee_SSN']??''; ?>" readonly /><input type="submit" name="delete" value="delete"   /></td>
+                    <td><input style="width:0%;display: none;" name="employee_SSN2" value="<?php echo $data['employee_SSN']??''; ?>" readonly /><input type="submit" name="delete" value="delete"   /></td>
 
 
                 </form>
