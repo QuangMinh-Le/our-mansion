@@ -23,6 +23,35 @@ session_start();
                 $roomsBrowsed=[];
             }
         }
+        if(isset($_POST['book'])){
+     
+            $employee_SSN  = $employee_data['employee_SSN'];
+            //echo "$client_SSN    ";
+            
+            $client_SSN = $_POST['client_SSN'];
+            $room_id = $_POST['room_id'];
+            $startDate = date('Y-m-d', strtotime($_POST['startDate']));
+            $endDate = date('Y-m-d', strtotime($_POST['endDate']));
+
+           if(!empty($client_SSN) && !empty($startDate) && !empty($endDate)){
+                $query ="INSERT INTO booking (employee_SSN, client_SSN, room_id, startDate, endDate, archived, paid) values ('$employee_SSN', $client_SSN, $room_id, '$startDate', '$endDate', 0,0)";
+                //$query ="INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ($client_SSN, $room_id, '$startDate', '$endDate', 0)";
+                try{
+                    $result = mysqli_query($con, $query);
+                }catch (Exception $e){
+                    echo "<p style= \"color:red\"> Booking counldn't be created! Try again!</p>";
+                    echo $e->getMessage();
+                    //exit;
+                }
+            }else{
+                echo "<h1 style= \"color:red\"> Please fill all the fields</h1>";
+            }
+
+	
+
+
+
+        }
     }
 
 
@@ -207,7 +236,32 @@ session_start();
 			<td><?php echo $data['ratingStars']??''; ?></td>
 			<td><?php echo $data['city']??''; ?></td>  
             <td><?php echo $data['numberOfRooms']??''; ?></td> 
-			<td> <input type="button" value="book!!!"  /></td>
+			<td><form method="post">
+                <input style="width:0%; display: none;" name="room_id" value="<?php echo $data['room_id']??''; ?>" readonly /> 
+                <select name="client_SSN">
+                    <option value="">Select client_SSN</option>
+                    <?php 
+                        $query ="SELECT DISTINCT client_SSN FROM client";
+                        $result = $con->query($query);
+                        if($result->num_rows> 0){
+                            while($optionData=$result->fetch_assoc()){
+                            $option =$optionData['client_SSN'];
+                            //$id =$optionData['hotel_id'];
+                        ?>
+                        <option value="'<?php echo $option; ?>'" ><?php echo $option; ?> </option>
+                    <?php
+                    }}
+                    ?>
+                </select><br>
+                <label for="startDate">Start Date</label>
+				<input id="startDate" class="form-control" type="date" name="startDate"/>
+                
+                <label for="startDate">End Date</label>
+				<input id="endDate" class="form-control" type="date" name="endDate"/>
+
+                <input type="submit" value="book" name="book" />
+                </form>
+            </td>
 </tr>
      <?php
    

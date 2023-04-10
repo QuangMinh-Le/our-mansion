@@ -81,6 +81,7 @@ session_start();
 
 		 <br><br><br>
 		 <h1 style= " text-align: center;"> Existing booking to pay:</h1>
+		 <p style= " text-align: center;"> please reload page after paying, to display the change</p>
 
 
 		<div class="container" style="width: 2500px;"	>
@@ -116,7 +117,7 @@ session_start();
 			<td><?php echo $data['archived']??''; ?></td>  
             <td><?php echo $data['paid']??''; ?></td>   
 			<td> <form method="post">
-                    <input style="width:0.1%;" name="booking_id" value="<?php echo $data['booking_id']??''; ?>" readonly>
+                    <input style="width:0.1%; display: none;" name="booking_id" value="<?php echo $data['booking_id']??''; ?>" readonly>
                     <input type="submit" value="pay booking" />
                  </form>
             </td>

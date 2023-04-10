@@ -218,7 +218,7 @@ session_start();
                     <td> <input type="submit" name="edit"  value="edit" /></td>
                 </form>
                 <form method="post">
-                    <td><input style="width:0%" name="hotel_id2" value="<?php echo $data['hotel_id']??''; ?>" readonly/><input type="submit" name="delete" value="delete"   /></td>
+                    <td><input style="width:0%;display: none;" name="hotel_id2" value="<?php echo $data['hotel_id']??''; ?>" readonly/><input type="submit" name="delete" value="delete"   /></td>
 
                 </form>
 

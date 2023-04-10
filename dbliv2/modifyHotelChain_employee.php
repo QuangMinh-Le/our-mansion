@@ -63,7 +63,7 @@ session_start();
 				try {
 					$query = "INSERT INTO Hotelchain (chain_name, centralAddress , centralPhone , centralEmail,numberOfHotels  ) VALUES ('$chain_name','$address', '$phone', '$email', 0)";
 					$result = $con->query($query);
-				}catch (Exception $e ){ echo"<h1 style= \"color:red ; text-align: center;\">error, chain-name already exists!</h1>";
+				}catch (Exception $e ){ echo"<h1 style= \"color:red ; text-align: center;\">error, chain-name/phone/email/address is already used!</h1>";
                     echo $e->getMessage();
                 }
 
@@ -151,11 +151,11 @@ session_start();
 			<table class="table table-bordered" >
 			<thead><tr>
 
-				<th style="width:15%;">chain_name</th>
+				<th style="width:15%;">chain_name (readonly)</th>
 				<th style="width:15%;">address</th>
 				<th style="width:20%;">phone </th>
 				<th style="width:500px;">email</th>
-                <th style="width:500px;">numberOfHotels </th>
+                <th style="width:500px;">numberOfHotels (readonly)</th>
 			</thead>
             <tbody>
 		<?php
@@ -178,7 +178,7 @@ session_start();
                     <td> <input type="submit" name="edit"  value="edit" /></td>
                 </form>
                 <form method="post">
-                    <td><input style="width:0%" name="chain_name2" value="<?php echo $data['chain_name']??''; ?>" readonly/><input type="submit" name="delete" value="delete"   /></td>
+                    <td><input style="width:0%;display: none;	" name="chain_name2" value="<?php echo $data['chain_name']??''; ?>" readonly/><input type="submit" name="delete" value="delete"   /></td>
                         
                 </form>
 
