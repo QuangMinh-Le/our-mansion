@@ -18,7 +18,7 @@ session_start();
             header("Location: login_customer.php");
             die;
         }else{
-            echo"Please enter all fields!";
+			echo"<h1 style= \"color:red ; text-align: center;\">Please enter all fields!</h1>";
         }
     }
 ?>

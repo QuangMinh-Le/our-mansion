@@ -27,8 +27,9 @@ session_start();
 		 <br>
 		 logined as employee, options:
 		 <br>
-		 <a href="BookReservation_employee.php"> See/Book Reservations</a> <br>
 		 <a href="BrowseRooms_employee.php"> Browse Rooms to book</a><br>
+		 <a href="BookReservation_employee.php"> See/Book Reservations</a> <br>
+		 <a href="PayBooking_employee.php"> See/Pay Bookings</a> <br>
 		 <a href="modifyInfo_employee.php"> Modify infos</a>
 
 		 <br><br><br>
