@@ -18,6 +18,11 @@ if (isset($_POST['reserve'])) {
 	$endDate = date('Y-m-d', strtotime($_POST['endDate']));
 	echo "$endDate    ";
 
+	$startDate = date('Y-m-d', strtotime($_POST['startDateFilter']));
+	echo "$startDate    ";
+	$endDate = date('Y-m-d', strtotime($_POST['endDateFilter']));
+	echo "$endDate    ";
+
 	$query = "INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
 	try {
 		$result = mysqli_query($con, $query);
@@ -48,7 +53,7 @@ if (isset($_POST['filter'])) {
 
 	$query = "SELECT room_id, room_number, room.hotel_id, price, peopleCapacity, view, extandable, damage, chain_name, ratingStars, city, hotel.numberOfRooms  
 				FROM room, hotel  WHERE hotel.hotel_id=room.hotel_id AND city=$city AND peopleCapacity=$peopleCapacity AND chain_name=$chain_name AND ratingStars=$ratingStars AND view = $view AND hotel.numberOfRooms = $numberOfRooms AND price BETWEEN $lowprice AND $highprice 
-				And room_id NOT IN (SELECT distinct room_id from Reservation WHERE (!(startDate < '$startDate' and endDate < '$startDate')  and !(startDate > '$endDate' and endDate > '$startDate')))";
+				And room_id NOT IN (SELECT distinct room_id from Reservation WHERE (!(startDate < '$startDate' and endDate < '$startDate')  and !(startDate > '$endDate' and endDate > '$startDate'))) and room_id NOT IN (SELECT distinct room_id from Booking WHERE (!(startDate < '$startDate' and endDate < '$startDate')  and !(startDate > '$endDate' and endDate > '$startDate')))";
 	$result = $con->query($query);
 	if ($result->num_rows > 0) {
 		$roomsBrowsed = mysqli_fetch_all($result, MYSQLI_ASSOC);
