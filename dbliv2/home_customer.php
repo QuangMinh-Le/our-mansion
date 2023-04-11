@@ -66,18 +66,16 @@ if (isset($_POST['reserve'])) {
 			echo "The room that you are reserving is not available in the date range you just inputted. You should put the same date with the one in filter! ";
 		} else {
 			echo "No conflict! ";
+			$query = "INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
+			try {
+				$result = mysqli_query($con, $query);
+				echo "Your reservation is successfully executed!";
+			} catch (Exception $e) {
+				echo "<p style= \"color:red\"> Reservation counldn't be created! Try again!</p>";
+				echo $e->getMessage();
+				//exit;
+			}
 		}
-	}
-
-
-	$query = "INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
-	try {
-		$result = mysqli_query($con, $query);
-		echo "Your reservation is successfully executed!";
-	} catch (Exception $e) {
-		echo "<p style= \"color:red\"> Reservation counldn't be created! Try again!</p>";
-		echo $e->getMessage();
-		//exit;
 	}
 
 }
