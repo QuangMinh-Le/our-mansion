@@ -7,6 +7,7 @@ include("function.php");
 $client_data = check_login_customer($con);
 
 $_SESSION;
+$roomsBrowsed;
 
 
 if (isset($_POST['reserve'])) {
@@ -288,6 +289,7 @@ if (isset($_POST['filter'])) {
 
 		<tbody>
 			<?php
+			if(isset($roomsBrowsed)){
 			if (count($roomsBrowsed) > 0) {
 
 				foreach ($roomsBrowsed as $data) {
@@ -373,7 +375,7 @@ if (isset($_POST['filter'])) {
 					</td>
 				<tr>
 					<?php
-			} ?>
+			}} ?>
 	</div>
 
 
