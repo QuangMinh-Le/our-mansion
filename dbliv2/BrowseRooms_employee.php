@@ -418,7 +418,7 @@ session_start();
                                 }}
                                 ?>
                             </select><br><br>
-                            <button type="submit" class="btn btn-primary" name="reserve">Confirm Reservation</button>
+                            <button type="submit" class="btn btn-primary" name="reserve">Confirm Booking</button>
 
                         </div>
                     </form>
