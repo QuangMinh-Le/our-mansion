@@ -39,39 +39,43 @@ if (isset($_POST['reserve'])) {
 	$room_id = $_POST['room_id'];
 	$startDate = date('Y-m-d', strtotime($_POST['startDate']));
 	$endDate = date('Y-m-d', strtotime($_POST['endDate']));
-
-	$query_checker1 = "SELECT distinct room_id 
-							from Reservation 
-							WHERE room_id = $room_id
-							and(!(startDate < '$startDate' and endDate < '$startDate')  and !(startDate > '$endDate' and endDate > '$startDate'))";
-
-	$checker = mysqli_query($con, $query_checker1);
-
-	if (mysqli_num_rows($checker) > 0) {
-		echo "The room that you are reserving is not available in the date range you just inputted. You should put the same date with the one in filter!";
+	if ($startDate === '1970-01-01' or $endDate === '1970-01-01') {
+		echo "Date input is blank. Please try again! ";
 	} else {
-		$query_checker2 = "SELECT distinct room_id 
-		from Booking
-		WHERE room_id = $room_id
-		and(!(startDate < '$startDate' and endDate < '$startDate')  and !(startDate > '$endDate' and endDate > '$startDate'))";
-
-		$checker2 = mysqli_query($con, $query_checker2);
-
-		if (mysqli_num_rows($checker2) > 0) {
-			echo "<h4 style= \"color:red\"> The room that you are reserving is not available in the date range you just inputted. You should put the same date with the one in filter!</h4> ";
+		$query_checker1 = "SELECT distinct room_id 
+								from Reservation 
+								WHERE room_id = $room_id
+								and(!(startDate < '$startDate' and endDate < '$startDate')  and !(startDate > '$endDate' and endDate > '$startDate'))";
+	
+		$checker = mysqli_query($con, $query_checker1);
+	
+		if (mysqli_num_rows($checker) > 0) {
+			echo "The room that you are reserving is not available in the date range you just inputted. You should put the same date with the one in filter!";
 		} else {
-			echo "No conflict! ";
-			$query = "INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
-			try {
-				$result = mysqli_query($con, $query);
-				echo "Your reservation is successfully executed!";
-			} catch (Exception $e) {
-				echo "<p style= \"color:red\"> Reservation counldn't be created! Try again!</p>";
-				echo $e->getMessage();
-				//exit;
+			$query_checker2 = "SELECT distinct room_id 
+			from Booking
+			WHERE room_id = $room_id
+			and(!(startDate < '$startDate' and endDate < '$startDate')  and !(startDate > '$endDate' and endDate > '$startDate'))";
+	
+			$checker2 = mysqli_query($con, $query_checker2);
+	
+			if (mysqli_num_rows($checker2) > 0) {
+				echo "<h4 style= \"color:red\"> The room that you are reserving is not available in the date range you just inputted. You should put the same date with the one in filter!</h4> ";
+			} else {
+				echo "No conflict! ";
+				$query = "INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
+				try {
+					$result = mysqli_query($con, $query);
+					echo "Your reservation is successfully executed!";
+				} catch (Exception $e) {
+					echo "<p style= \"color:red\"> Reservation counldn't be created! Try again!</p>";
+					echo $e->getMessage();
+					//exit;
+				}
 			}
 		}
 	}
+	
 
 }
 
