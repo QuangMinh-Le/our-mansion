@@ -8,32 +8,7 @@ $client_data = check_login_customer($con);
 
 $_SESSION;
 $roomsBrowsed;
-
-
-if (isset($_POST['reserve'])) {
-	$client_SSN = $client_data['client_SSN'];
-	$room_id = $_POST['room_id'];
-	$startDate = date('Y-m-d', strtotime($_POST['startDate']));
-	echo "$startDate    ";
-	$endDate = date('Y-m-d', strtotime($_POST['endDate']));
-	echo "$endDate    ";
-
-	$startDate = date('Y-m-d', strtotime($_POST['startDateFilter']));
-	echo "$startDate    ";
-	$endDate = date('Y-m-d', strtotime($_POST['endDateFilter']));
-	echo "$endDate    ";
-
-	$query = "INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
-	try {
-		$result = mysqli_query($con, $query);
-	} catch (Exception $e) {
-		echo "<p style= \"color:red\"> Reservation counldn't be created! Try again!</p>";
-		echo $e->getMessage();
-		//exit;
-	}
-
-}
-
+$GLOBALS['a'];
 
 if (isset($_POST['filter'])) {
 	$city = $_POST['city'];
@@ -44,7 +19,7 @@ if (isset($_POST['filter'])) {
 	$lowprice = $_POST['lowprice'];
 	$highprice = $_POST['highprice'];
 	$view = $_POST['view'];
-	$numberOfRooms = $_POST['numberOfRooms']; 
+	$numberOfRooms = $_POST['numberOfRooms'];
 
 	$startDate = date('Y-m-d', strtotime($_POST['startDateFilter']));
 	echo "$startDate    ";
@@ -60,9 +35,52 @@ if (isset($_POST['filter'])) {
 	} else {
 		$roomsBrowsed = [];
 	}
-
 }
 
+if (isset($_POST['reserve'])) {
+	$client_SSN = $client_data['client_SSN'];
+	$room_id = $_POST['room_id'];
+	$startDate = date('Y-m-d', strtotime($_POST['startDate']));
+	echo "$startDate    ";
+	$endDate = date('Y-m-d', strtotime($_POST['endDate']));
+	echo "$endDate    ";
+
+	$query_checker1 = "SELECT distinct room_id 
+							from Reservation 
+							WHERE room_id = $room_id
+							and(!(startDate < '$startDate' and endDate < '$startDate')  and !(startDate > '$endDate' and endDate > '$startDate'))";
+
+	$checker = mysqli_query($con, $query_checker1);
+
+	if (mysqli_num_rows($checker) > 0) {
+		echo "The room that you are reserving is not available in the date range you just inputted. You should put the same date with the one in filter!";
+	} else {
+		$query_checker2 = "SELECT distinct room_id 
+		from Booking
+		WHERE room_id = $room_id
+		and(!(startDate < '$startDate' and endDate < '$startDate')  and !(startDate > '$endDate' and endDate > '$startDate'))";
+
+		$checker2 = mysqli_query($con, $query_checker2);
+
+		if (mysqli_num_rows($checker2) > 0) {
+			echo "The room that you are reserving is not available in the date range you just inputted. You should put the same date with the one in filter! ";
+		} else {
+			echo "No conflict! ";
+		}
+	}
+
+
+	$query = "INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
+	try {
+		$result = mysqli_query($con, $query);
+		echo "Your reservation is successfully executed!";
+	} catch (Exception $e) {
+		echo "<p style= \"color:red\"> Reservation counldn't be created! Try again!</p>";
+		echo $e->getMessage();
+		//exit;
+	}
+
+}
 
 
 ?>
@@ -109,6 +127,7 @@ if (isset($_POST['filter'])) {
 	.hidden {
 		display: none;
 	}
+
 	h6 {
 		color: red;
 		font-weight: bolder;
@@ -119,269 +138,272 @@ if (isset($_POST['filter'])) {
 
 <body>
 
-        <h1 style= "font-family: fantasy ; text-align: center;">OurMansion</h1>
-		<a href="logout_customer.php"> Logout</a>
-		<h1>This is the home page</h1>
-		<br>
-		Hello, <?php echo $client_data['cFullName']; ?>
-		<br>
-		 logined as customer, options:
-		 <br>
-		 <a href="modifyInfo_customer.php"> modify your infos</a><br>
-		 
-		 <a href="YourActivity_customer.php">see your activity (bookings, reservations)</a>
+	<h1 style="font-family: fantasy ; text-align: center;">OurMansion</h1>
+	<a href="logout_customer.php"> Logout</a>
+	<h1>This is the home page</h1>
+	<br>
+	Hello,
+	<?php echo $client_data['cFullName']; ?>
+	<br>
+	logined as customer, options:
+	<br>
+	<a href="modifyInfo_customer.php"> modify your infos</a><br>
 
-		 <br><br>
-		 
-		 <h1 style= " text-align: center;"> Existing rooms to reserve:</h1>
+	<a href="YourActivity_customer.php">see your activity (bookings, reservations)</a>
 
+	<br><br>
 
-		<div class="container" style="width: 2500px;"	>
-
-	<div class="container" style="width: 100%;">
-
-		<!-- Room filter -->
+	<h1 style=" text-align: center;"> Existing rooms to reserve:</h1>
 
 
-		<form action="" method="post">
+	<div class="container" style="width: 2500px;">
+
+		<div class="container" style="width: 100%;">
+
+			<!-- Room filter -->
 
 
-			<div class="mb-3">
-				<label for="startDate">Start Date</label>
-				<input id="startDate" class="form-control" type="date" name="startDateFilter" />
-			</div>
-			<div class="mb-3">
-				<label for="startDate">End Date</label>
-				<input id="endDate" class="form-control" type="date" name="endDateFilter" />
-			</div>
-			<br>
-			<select name="city">
-				<option value="city">Select City</option>
-				<?php
-				$query = "SELECT DISTINCT city FROM hotel";
-				$result = $con->query($query);
-				if ($result->num_rows > 0) {
-					while ($optionData = $result->fetch_assoc()) {
-						$option = $optionData['city'];
-						//$id =$optionData['hotel_id'];
-						?>
-						<option value="'<?php echo $option; ?>'"><?php echo $option; ?> </option>
-						<?php
+			<form action="" method="post">
+
+
+				<div class="mb-3">
+					<label for="startDate">Start Date</label>
+					<input id="startDate" class="form-control" type="date" name="startDateFilter" />
+				</div>
+				<div class="mb-3">
+					<label for="startDate">End Date</label>
+					<input id="endDate" class="form-control" type="date" name="endDateFilter" />
+				</div>
+				<br>
+				<select name="city">
+					<option value="city">Select City</option>
+					<?php
+					$query = "SELECT DISTINCT city FROM hotel";
+					$result = $con->query($query);
+					if ($result->num_rows > 0) {
+						while ($optionData = $result->fetch_assoc()) {
+							$option = $optionData['city'];
+							//$id =$optionData['hotel_id'];
+							?>
+							<option value="'<?php echo $option; ?>'"><?php echo $option; ?> </option>
+							<?php
+						}
 					}
-				}
-				?>
-			</select>
-			<select name="peopleCapacity">
-				<option value="peopleCapacity">Select people capacity</option>
-				<?php
-				$query = "SELECT DISTINCT peopleCapacity FROM Room";
-				$result = $con->query($query);
-				if ($result->num_rows > 0) {
-					while ($optionData = $result->fetch_assoc()) {
-						$option = $optionData['peopleCapacity'];
-						//$id =$optionData['hotel_id'];
-						?>
-						<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
-						<?php
-					}
-				}
-				?>
-			</select>
-			<select name="chain_name">
-				<option value="chain_name">Select hotel chain</option>
-				<?php
-				$query = "SELECT DISTINCT chain_name FROM HotelChain";
-				$result = $con->query($query);
-				if ($result->num_rows > 0) {
-					while ($optionData = $result->fetch_assoc()) {
-						$option = $optionData['chain_name'];
-						//$id =$optionData['hotel_id'];
-						?>
-						<option value="'<?php echo $option; ?>'"><?php echo $option; ?> </option>
-						<?php
-					}
-				}
-				?>
-			</select>
-
-			<select name="ratingStars">
-				<option value="ratingStars">Select rating categorie</option>
-				<?php
-				$query = "SELECT DISTINCT ratingStars FROM Hotel";
-				$result = $con->query($query);
-				if ($result->num_rows > 0) {
-					while ($optionData = $result->fetch_assoc()) {
-						$option = $optionData['ratingStars'];
-						//$id =$optionData['hotel_id'];
-						?>
-						<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
-						<?php
-					}
-				}
-				?>
-			</select>
-
-			<select name="numberOfRooms">
-				<option value="numberOfRooms">Select number of rooms in a hotel</option>
-				<?php
-				$query = "SELECT DISTINCT numberOfRooms FROM Hotel";
-				$result = $con->query($query);
-				if ($result->num_rows > 0) {
-					while ($optionData = $result->fetch_assoc()) {
-						$option = $optionData['numberOfRooms'];
-						//$id =$optionData['hotel_id'];
-						?>
-						<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
-						<?php
-					}
-				}
-				?>
-			</select>
-
-			<select name="view">
-				<option value="view">Select room view</option>
-				<?php
-				$query = "SELECT DISTINCT view FROM Room";
-				$result = $con->query($query);
-				if ($result->num_rows > 0) {
-					while ($optionData = $result->fetch_assoc()) {
-						$option = $optionData['view'];
-						//$id =$optionData['hotel_id'];
-						?>
-						<option value="'<?php echo $option; ?>'"><?php echo $option; ?> </option>
-						<?php
-					}
-				}
-				?>
-			</select>
-
-			<select name="lowprice">
-				<option value="0">Select lowest price</option>
-				<?php
-				$query = "SELECT DISTINCT price FROM Room";
-				$result = $con->query($query);
-				if ($result->num_rows > 0) {
-					while ($optionData = $result->fetch_assoc()) {
-						$option = $optionData['price'];
-						//$id =$optionData['hotel_id'];
-						?>
-						<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
-						<?php
-					}
-				}
-				?>
-			</select>
-
-			<select name="highprice">
-				<option value="1000000">Select highest price</option>
-				<?php
-				$query = "SELECT DISTINCT price FROM Room";
-				$result = $con->query($query);
-				if ($result->num_rows > 0) {
-					while ($optionData = $result->fetch_assoc()) {
-						$option = $optionData['price'];
-						//$id =$optionData['hotel_id'];
-						?>
-						<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
-						<?php
-					}
-				}
-				?>
-			</select>
-
-			<input type="submit" name="filter" value="Filter" />
-		</form>
-
-		<tbody>
-			<?php
-			if(isset($roomsBrowsed)){
-			if (count($roomsBrowsed) > 0) {
-
-				foreach ($roomsBrowsed as $data) {
 					?>
-					<form method="post" class="reservation_form">
-						<div>
-							<h2>
-								<?php echo $data['chain_name'] ?? ''; ?>
-							</h2>
-							<div class="mb-3">
-								<h4>
-									<?php echo $data['ratingStars'] ?? ''; ?> &#11088;
-								</h4>
-							</div>
-							<div class="mb-3">
-								<h4>Location:
-									<?php echo $data['city'] ?? ''; ?>
-								</h4>
-							</div>
-							<div class="mb-3">
-								<h4>Room number:
-									<?php echo $data['room_number'] ?? ''; ?>
-								</h4>
-							</div>
-							<div class="mb-3">
-								<h4>Room id:
-									<input type="number" name="room_id" readonly value="<?php echo $data['room_id'] ?? ''; ?>"></input>
-								</h4>
-							</div>
-							<div class="mb-3">
-								<h4>Room capacity:
-									<?php echo $data['peopleCapacity'] ?? ''; ?>
-								</h4>
-							</div>
-
-							<div class="mb-3">
-								<h4>Room condition:
-									<?php echo $data['damage'] ?? ''; ?>
-								</h4>
-							</div>
-
-							<div class="mb-3">
-								<h4>Total number of rooms in hotel:
-									<?php echo $data['numberOfRooms'] ?? ''; ?>
-								</h4>
-							</div>
-
-							<div class="mb-3">
-								<h4>View:
-									<?php echo $data['view'] ?? ''; ?>
-								</h4>
-							</div>
-							<div class="mb-3">
-								<h4>Price (per night):
-									<?php echo $data['price'] ?? ''; ?>
-								</h4>
-							</div>
-
-
-							<div class="mb-3">
-								<label for="startDate">Start Date</label>
-								<input id="startDate" class="form-control" type="date" name="startDate" />
-							</div>
-							<div class="mb-3">
-								<label for="startDate">End Date</label>
-								<input id="endDate" class="form-control" type="date" name="endDate" />
-							</div>
-
-							<button type="submit" class="btn btn-primary" name="reserve">Confirm Reservation</button>
-
-						</div>
-					</form>
-
+				</select>
+				<select name="peopleCapacity">
+					<option value="peopleCapacity">Select people capacity</option>
 					<?php
-				}
-			} else { 
-				
-				?>
-				<h6>---There is no room that matches the selected criterias---</h5>
-				<tr>
-					<td colspan="8">
-						<?php echo $fetchData; ?>
-					</td>
-				<tr>
+					$query = "SELECT DISTINCT peopleCapacity FROM Room";
+					$result = $con->query($query);
+					if ($result->num_rows > 0) {
+						while ($optionData = $result->fetch_assoc()) {
+							$option = $optionData['peopleCapacity'];
+							//$id =$optionData['hotel_id'];
+							?>
+							<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
+							<?php
+						}
+					}
+					?>
+				</select>
+				<select name="chain_name">
+					<option value="chain_name">Select hotel chain</option>
 					<?php
-			}} ?>
-	</div>
+					$query = "SELECT DISTINCT chain_name FROM HotelChain";
+					$result = $con->query($query);
+					if ($result->num_rows > 0) {
+						while ($optionData = $result->fetch_assoc()) {
+							$option = $optionData['chain_name'];
+							//$id =$optionData['hotel_id'];
+							?>
+							<option value="'<?php echo $option; ?>'"><?php echo $option; ?> </option>
+							<?php
+						}
+					}
+					?>
+				</select>
+
+				<select name="ratingStars">
+					<option value="ratingStars">Select rating categorie</option>
+					<?php
+					$query = "SELECT DISTINCT ratingStars FROM Hotel";
+					$result = $con->query($query);
+					if ($result->num_rows > 0) {
+						while ($optionData = $result->fetch_assoc()) {
+							$option = $optionData['ratingStars'];
+							//$id =$optionData['hotel_id'];
+							?>
+							<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
+							<?php
+						}
+					}
+					?>
+				</select>
+
+				<select name="numberOfRooms">
+					<option value="numberOfRooms">Select number of rooms in a hotel</option>
+					<?php
+					$query = "SELECT DISTINCT numberOfRooms FROM Hotel";
+					$result = $con->query($query);
+					if ($result->num_rows > 0) {
+						while ($optionData = $result->fetch_assoc()) {
+							$option = $optionData['numberOfRooms'];
+							//$id =$optionData['hotel_id'];
+							?>
+							<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
+							<?php
+						}
+					}
+					?>
+				</select>
+
+				<select name="view">
+					<option value="view">Select room view</option>
+					<?php
+					$query = "SELECT DISTINCT view FROM Room";
+					$result = $con->query($query);
+					if ($result->num_rows > 0) {
+						while ($optionData = $result->fetch_assoc()) {
+							$option = $optionData['view'];
+							//$id =$optionData['hotel_id'];
+							?>
+							<option value="'<?php echo $option; ?>'"><?php echo $option; ?> </option>
+							<?php
+						}
+					}
+					?>
+				</select>
+
+				<select name="lowprice">
+					<option value="0">Select lowest price</option>
+					<?php
+					$query = "SELECT DISTINCT price FROM Room";
+					$result = $con->query($query);
+					if ($result->num_rows > 0) {
+						while ($optionData = $result->fetch_assoc()) {
+							$option = $optionData['price'];
+							//$id =$optionData['hotel_id'];
+							?>
+							<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
+							<?php
+						}
+					}
+					?>
+				</select>
+
+				<select name="highprice">
+					<option value="1000000">Select highest price</option>
+					<?php
+					$query = "SELECT DISTINCT price FROM Room";
+					$result = $con->query($query);
+					if ($result->num_rows > 0) {
+						while ($optionData = $result->fetch_assoc()) {
+							$option = $optionData['price'];
+							//$id =$optionData['hotel_id'];
+							?>
+							<option value="<?php echo $option; ?>"><?php echo $option; ?> </option>
+							<?php
+						}
+					}
+					?>
+				</select>
+
+				<input type="submit" name="filter" value="Filter" />
+			</form>
+
+			<tbody>
+				<?php
+				if (isset($roomsBrowsed)) {
+					if (count($roomsBrowsed) > 0) {
+
+						foreach ($roomsBrowsed as $data) {
+							?>
+							<form method="post" class="reservation_form">
+								<div>
+									<h2>
+										<?php echo $data['chain_name'] ?? ''; ?>
+									</h2>
+									<div class="mb-3">
+										<h4>
+											<?php echo $data['ratingStars'] ?? ''; ?> &#11088;
+										</h4>
+									</div>
+									<div class="mb-3">
+										<h4>Location:
+											<?php echo $data['city'] ?? ''; ?>
+										</h4>
+									</div>
+									<div class="mb-3">
+										<h4>Room number:
+											<?php echo $data['room_number'] ?? ''; ?>
+										</h4>
+									</div>
+									<div class="mb-3">
+										<h4>Room id:
+											<input type="number" name="room_id" readonly
+												value="<?php echo $data['room_id'] ?? ''; ?>"></input>
+										</h4>
+									</div>
+									<div class="mb-3">
+										<h4>Room capacity:
+											<?php echo $data['peopleCapacity'] ?? ''; ?>
+										</h4>
+									</div>
+
+									<div class="mb-3">
+										<h4>Room condition:
+											<?php echo $data['damage'] ?? ''; ?>
+										</h4>
+									</div>
+
+									<div class="mb-3">
+										<h4>Total number of rooms in hotel:
+											<?php echo $data['numberOfRooms'] ?? ''; ?>
+										</h4>
+									</div>
+
+									<div class="mb-3">
+										<h4>View:
+											<?php echo $data['view'] ?? ''; ?>
+										</h4>
+									</div>
+									<div class="mb-3">
+										<h4>Price (per night):
+											<?php echo $data['price'] ?? ''; ?>
+										</h4>
+									</div>
+
+
+									<div class="mb-3">
+										<label for="startDate">Start Date</label>
+										<input id="startDate" class="form-control" type="date" name="startDate" />
+									</div>
+									<div class="mb-3">
+										<label for="startDate">End Date</label>
+										<input id="endDate" class="form-control" type="date" name="endDate" />
+									</div>
+
+									<button type="submit" class="btn btn-primary" name="reserve">Confirm Reservation</button>
+
+								</div>
+							</form>
+
+							<?php
+						}
+					} else {
+
+						?>
+						<h6>---There is no room that matches the selected criterias---</h5>
+							<tr>
+								<td colspan="8">
+									<?php echo $fetchData; ?>
+								</td>
+							<tr>
+								<?php
+					}
+				} ?>
+		</div>
 
 
 </body>
