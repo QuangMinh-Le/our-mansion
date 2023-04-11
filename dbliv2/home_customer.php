@@ -8,7 +8,6 @@ $client_data = check_login_customer($con);
 
 $_SESSION;
 $roomsBrowsed;
-$GLOBALS['a'];
 
 if (isset($_POST['filter'])) {
 	$city = $_POST['city'];
@@ -22,9 +21,7 @@ if (isset($_POST['filter'])) {
 	$numberOfRooms = $_POST['numberOfRooms'];
 
 	$startDate = date('Y-m-d', strtotime($_POST['startDateFilter']));
-	echo "$startDate    ";
 	$endDate = date('Y-m-d', strtotime($_POST['endDateFilter']));
-	echo "$endDate    ";
 
 	$query = "SELECT room_id, room_number, room.hotel_id, price, peopleCapacity, view, extandable, damage, chain_name, ratingStars, city, hotel.numberOfRooms  
 				FROM room, hotel  WHERE hotel.hotel_id=room.hotel_id AND city=$city AND peopleCapacity=$peopleCapacity AND chain_name=$chain_name AND ratingStars=$ratingStars AND view = $view AND hotel.numberOfRooms = $numberOfRooms AND price BETWEEN $lowprice AND $highprice 
@@ -41,9 +38,7 @@ if (isset($_POST['reserve'])) {
 	$client_SSN = $client_data['client_SSN'];
 	$room_id = $_POST['room_id'];
 	$startDate = date('Y-m-d', strtotime($_POST['startDate']));
-	echo "$startDate    ";
 	$endDate = date('Y-m-d', strtotime($_POST['endDate']));
-	echo "$endDate    ";
 
 	$query_checker1 = "SELECT distinct room_id 
 							from Reservation 
@@ -63,7 +58,7 @@ if (isset($_POST['reserve'])) {
 		$checker2 = mysqli_query($con, $query_checker2);
 
 		if (mysqli_num_rows($checker2) > 0) {
-			echo "The room that you are reserving is not available in the date range you just inputted. You should put the same date with the one in filter! ";
+			echo "<h4 style= \"color:red\"> The room that you are reserving is not available in the date range you just inputted. You should put the same date with the one in filter!</h4> ";
 		} else {
 			echo "No conflict! ";
 			$query = "INSERT INTO Reservation (client_SSN, room_id, startDate, endDate, archived) values ('$client_SSN', $room_id, '$startDate', '$endDate', 0)";
