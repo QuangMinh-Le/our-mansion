@@ -1,0 +1,140 @@
+-- ce code est pour mySQL, pour installer mySQL workbench les 20 premiere min de https://www.youtube.com/watch?v=fFgdnS1laA0
+
+CREATE SCHEMA `dbliv2` ;
+
+CREATE TABLE dbliv2.HotelChain (
+chain_name VARCHAR(64) UNIQUE NOT NULL,
+centralAddress VARCHAR(64) UNIQUE,
+centralPhone VARCHAR(64) UNIQUE,
+centralEmail VARCHAR(64) UNIQUE,
+numberOfHotels INTEGER,
+PRIMARY KEY (chain_name)
+);
+
+
+
+CREATE TABLE dbliv2.Hotel (
+hotel_id INTEGER UNIQUE NOT NULL AUTO_INCREMENT,
+chain_name VARCHAR(64) NOT NULL,
+ratingStars INTEGER, 
+CHECK (ratingStars BETWEEN 1 AND 5),		-- rating is pre-defined			-- remove number of ratings,
+numberOfRooms INTEGER,			-- add a trigger to increase the room number when a new room is created
+city VARCHAR(64),
+address VARCHAR(64) UNIQUE,
+phone VARCHAR(64) UNIQUE,
+email VARCHAR(64) UNIQUE,
+PRIMARY KEY (hotel_id),
+FOREIGN KEY (chain_name) REFERENCES HotelChain(chain_name)
+);
+
+CREATE TABLE dbliv2.Room (
+room_id INTEGER UNIQUE AUTO_INCREMENT,
+room_number TINYINT,
+hotel_id INTEGER NOT NULL,
+price INTEGER,
+peopleCapacity INTEGER,
+view VARCHAR(64),
+-- CHECK(view IN ('mer', 'montagne')),			--Donnee def libre?
+extandable 	BIT,
+damage VARCHAR(64),
+PRIMARY KEY (room_id),
+FOREIGN KEY (hotel_id) REFERENCES Hotel (hotel_id)
+);
+
+CREATE TABLE dbliv2.Amenities(
+room_id INTEGER UNIQUE NOT NULL,
+TV BOOLEAN,					-- change all BOOLEAN to BIT
+AC BOOLEAN,
+fridge BOOLEAN,
+kitchen BOOLEAN,
+PRIMARY KEY (room_id)
+);
+
+CREATE TABLE dbliv2.Client (
+client_SSN VARCHAR(64) UNIQUE,		-- maybe add a id, username and password--
+cmail VARCHAR(100) UNIQUE,
+cFullName VARCHAR (64),
+caddress VARCHAR (64),
+cpass VARCHAR(100),
+registrationDate TIMESTAMP,
+PRIMARY KEY ( client_SSN)
+);
+
+CREATE TABLE dbliv2.Employee(
+employee_SSN VARCHAR (64) UNIQUE, 	-- maybe add a id, username and password--
+hotel_id INTEGER,
+email VARCHAR(100) UNIQUE,
+efullName VARCHAR(64),
+eaddress VARCHAR(64),
+jobPosition VARCHAR(64),
+epass VARCHAR(100),
+PRIMARY KEY (employee_SSN),
+FOREIGN KEY (hotel_id) REFERENCES Hotel (hotel_id)
+);
+
+CREATE TABLE dbliv2.Manager(
+hotel_id INTEGER UNIQUE NOT NULL,
+employee_SSN VARCHAR(64),
+PRIMARY KEY (hotel_id),
+FOREIGN KEY (hotel_id) REFERENCES Hotel (hotel_id),
+FOREIGN KEY (employee_SSN) REFERENCES Employee (employee_SSN)
+);
+
+CREATE TABLE dbliv2.Reservation(
+reservation_id INTEGER  UNIQUE AUTO_INCREMENT,
+client_SSN VARCHAR(64) NOT NULL,
+room_id INTEGER NOT NULL,
+startDate DATE,
+endDate DATE,
+archived BOOLEAN,
+PRIMARY KEY (reservation_id),
+FOREIGN KEY (client_SSN) REFERENCES Client (client_SSN)
+);
+
+CREATE TABLE dbliv2.Booking (
+booking_id INTEGER  UNIQUE AUTO_INCREMENT,
+reservation_id INTEGER  UNIQUE,
+employee_SSN VARCHAR(64) NOT NULL,
+client_SSN VARCHAR(64) NOT NULL,
+room_id INTEGER NOT NULL,
+startDate DATE,
+endDate DATE,
+archived BOOLEAN, 
+paid BOOLEAN,
+PRIMARY KEY (booking_id),
+FOREIGN KEY (employee_SSN) REFERENCES Employee (employee_SSN),
+FOREIGN KEY (client_SSN) REFERENCES Client (client_SSN),
+FOREIGN KEY (reservation_id) REFERENCES Reservation (reservation_id)
+);
+
+
+
+CREATE TRIGGER dbliv2.addHotel
+AFTER INSERT ON Hotel FOR EACH ROW
+UPDATE HotelChain SET numberOfHotels = numberOfHotels+1 WHERE HotelChain.chain_name = NEW.chain_name;
+
+CREATE TRIGGER dbliv2.addRoom
+AFTER INSERT ON Room FOR EACH ROW
+UPDATE Hotel SET numberOfRooms = numberOfRooms+1 WHERE Hotel.hotel_id = NEW.hotel_id;
+
+CREATE TRIGGER dbliv2.deleteHotel
+BEFORE DELETE ON Hotel FOR EACH ROW
+UPDATE HotelChain SET numberOfHotels = numberOfHotels-1 WHERE HotelChain.chain_name = OLD.chain_name;
+
+CREATE TRIGGER dbliv2.deleteRoom
+BEFORE DELETE ON Room FOR EACH ROW
+UPDATE Hotel SET numberOfRooms = numberOfRooms-1 WHERE Hotel.hotel_id = OLD.hotel_id;
+
+
+ALTER TABLE dbliv2.Room ADD INDEX (hotel_id); 
+ALTER TABLE dbliv2.Room ADD INDEX (price); 
+ALTER TABLE dbliv2.Room ADD INDEX (peopleCapacity); 
+ALTER TABLE dbliv2.Room ADD INDEX (view); 
+
+ALTER TABLE dbliv2.Hotel ADD INDEX (chain_name);
+ALTER TABLE dbliv2.Hotel ADD INDEX (ratingStars);
+ALTER TABLE dbliv2.Hotel ADD INDEX (city);
+ALTER TABLE dbliv2.Hotel ADD INDEX (hotel_id);
+
+CREATE VIEW dbliv2.numberOfRooms_city AS (SELECT COUNT( room_id), city FROM dbliv2.Room JOIN dbliv2.Hotel USING (hotel_id) GROUP BY city );
+CREATE VIEW dbliv2.peopleCapacity AS SELECT peopleCapacity FROM dbliv2.Room WHERE hotel_id =10;
