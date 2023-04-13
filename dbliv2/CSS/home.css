@@ -1,0 +1,232 @@
+/* General setup */
+
+:root {
+   --clr-dark-background: #171718;
+   --clr-darker-background: #0d0d0e;
+   --clr-dark-red: #c20440;
+   --clr-dark-blue: #1fceab;
+   --clr-dark-white: #f2eff5e2;
+   --clr-dark-grey: #575557;
+
+
+   --ff-title: 'Source Sans Pro', sans-serif;
+   --ff-content: 'JetBrains Mono', monospace;
+}
+
+html {
+ margin: 0;
+ padding: 0;
+ text-decoration: none;
+ list-style: none;
+ box-sizing: border-box;
+}
+
+body {
+   display: flex;
+   flex-direction: column;
+   background: var(--clr-dark-white);
+
+   transition: 0.7s; 
+   align-items: center;
+   justify-content: center;
+}
+.bigContainer {
+   width: 80%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   font-family: var(--ff-content);
+}
+
+.hidden {
+   display: none;
+}
+
+h6 {
+   color: red;
+   font-weight: bolder;
+   font-size: 1.5rem;
+}
+
+/* Welcome styles*/
+.header {
+   width: 100%;
+   
+}
+.header nav {
+   border-radius: 10px;
+   
+}
+.navbar-brand {
+   font-family: var(--ff-title);
+   font-weight: bolder;
+   transition: 0.2s;
+}
+
+.navbar-brand:hover {
+   color: #0effcf;
+   text-shadow: -2px -2px var(--clr-dark-red) ;
+   transition: 0.2s;
+}
+
+.nav-item {
+   font-family: var(--ff-content);
+   padding: 0 20px;
+}
+
+.nav-item a {
+   font-family: var(--ff-content);
+   transition: ease .2s;
+}
+
+.nav-item a:hover {
+   color: var(--clr-dark-blue);
+   text-decoration: underline;
+   transition: ease .2s;
+}
+
+.welcome {
+   margin-top: 30px;
+}
+
+.welcome button{
+   font-size: 18px;
+   font-weight: 400;
+   font-family: var(--ff-content);
+}
+
+.accordion-body {
+   font-size: 15px;
+   font-weight: 400;
+   font-family: var(--ff-content);
+}
+
+
+/* Filter styles*/
+
+.filter-room {
+   margin-top: 50px;
+   font-family: var(--ff-content);
+}
+
+.filter-date {
+   display: flex;
+   flex-direction: row;
+}
+
+.filter-date .mb-3{
+   padding-right: 30px;
+}
+
+.filter-date .mb-3 label{
+   font-weight: 400;
+   color: var(--clr-darker-background);
+}
+
+.filter-other select{
+   margin: 10px 0;
+   transition: .3s;
+   padding: 5px;
+   border-radius: 5px;
+}
+
+.filter-other select:hover{
+   box-shadow: -3px -3px var(--clr-dark-blue), 3px 3px var(--clr-dark-red);
+   transition: .3s;
+}
+
+.card-body form{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+}
+
+.card-body .filter-btn{
+   margin-top: 20px;
+   padding: 10px 30px;
+   background-color: var(--clr-darker-background);
+   color: white;
+   border: none;
+   border-radius: 10px;
+   transition: .3s;
+   font-size: 20px;
+}
+
+.card-body .filter-btn:hover{
+   box-shadow: -3px -3px var(--clr-dark-blue), 3px 3px var(--clr-dark-red);
+   transition: .3s;
+}
+
+/* Reservation-form style */
+
+.reservation_form {
+   background-color: white;
+   border-radius: 20px;
+   margin-top: 20px;
+   padding: 20px;
+   font-family: var(--ff-content);
+   box-shadow: 3px 3px var(--clr-dark-grey);
+}
+
+.reservation_form h4{
+   font-size: 17px;
+   font-weight: bolder;
+}
+
+.reservation-date {
+   display: flex;
+   flex-direction: row;
+}
+
+.reservation-date .mb-3{
+   margin-right: 40px;
+}
+
+.reservation-btn {
+   margin-top: 20px;
+   padding: 10px 30px;
+   background-color: var(--clr-darker-background);
+   color: white;
+   border: none;
+   border-radius: 10px;
+   transition: .3s;
+   font-size: 20px;
+}
+
+.reservation-btn:hover{
+   box-shadow: -3px -3px var(--clr-dark-blue), 3px 3px var(--clr-dark-red);
+   transition: .3s;
+}
+
+.edit_form {
+   background-color: white;
+   border-radius: 20px;
+   margin-top: 20px;
+   padding: 20px;
+   font-family: var(--ff-content);
+   box-shadow: 3px 3px var(--clr-dark-grey);
+   width: 50%;
+}
+
+.edit_form h4{
+   font-size: 17px;
+   font-weight: bolder;
+}
+
+.edit-btn {
+   margin-top: 20px;
+   padding: 10px 30px;
+   background-color: var(--clr-darker-background);
+   color: white;
+   border: none;
+   border-radius: 10px;
+   transition: .3s;
+   font-size: 20px;
+}
+
+.edit-btn:hover{
+   box-shadow: -3px -3px var(--clr-dark-blue), 3px 3px var(--clr-dark-red);
+   transition: .3s;
+}
+
